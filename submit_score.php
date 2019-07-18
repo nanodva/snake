@@ -19,7 +19,7 @@
 <body>
 <?php
 	$servername = "localhost";
-	$username = "amiral";
+	$username = "root";
 	$password = "";
 	$database = "score_db";
 	$table = "score";
