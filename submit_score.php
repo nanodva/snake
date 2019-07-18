@@ -47,6 +47,7 @@
 		$err=mysqli_error($conn);
 		echo "error: $err<br>";
 	}
+	mysqli_close($conn);
 ?>
 
 </body>
