@@ -488,7 +488,7 @@
 				setTimeout( function() {
 					menu.if_score.src = menu.if_score.src;
 					menu.if_score.style.visibility = "visible";
-				}, 1000);
+				}, 5000);
 			},
 			hide : function() {
 				// hide menu
