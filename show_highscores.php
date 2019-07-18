@@ -81,7 +81,7 @@
 		}
 
 		// query for scores
-		mysqli_refresh($conn);
+		mysqli_refresh($conn,MYSQLI_REFRESH_TABLES);
 		$query="SELECT name,score FROM score ORDER BY score DESC LIMIT 10";
 		$result=mysqli_query($conn,$query);
 
