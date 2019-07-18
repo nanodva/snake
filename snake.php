@@ -485,6 +485,7 @@
 			},
 			show : function() {
 				// wait for mysqli update and reload highscores
+				menu.if_score.style.visibility = "visible";
 				refresh = setInterval(function() {menu.if_score.src = menu.if_score.src;}, 50);
 				setTimeout( function() {
 					menu.if_score.src = menu.if_score.src;
