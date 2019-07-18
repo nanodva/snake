@@ -485,10 +485,12 @@
 			},
 			show : function() {
 				// wait for mysqli update and reload highscores
+				refresh = setInterval(function() {menu.if_score.src = menu.if_score.src;}, 50);
 				setTimeout( function() {
 					menu.if_score.src = menu.if_score.src;
 					menu.if_score.style.visibility = "visible";
 				}, 5000);
+				clearInterval(refresh);
 			},
 			hide : function() {
 				// hide menu
