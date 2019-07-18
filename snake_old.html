@@ -1,0 +1,512 @@
+<!DOCTYPE html> 
+<html lang="fr"> 
+    <head>
+        <meta charset="utf-8">
+        <title>Snake</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+  
+        
+        <style>
+            *:focus {
+                border: 2px solid pink;
+            }
+            .tableGame {
+                display: inline-block;
+                float: left;
+                width: 20%;
+                background : black;
+                padding : 10px;
+
+            }
+            .tableGame tr, td {
+                padding: 5px;
+                
+            }
+            
+            .tableGame tr {
+                border: 4px solid red;
+            }
+            
+            
+            input:focus {
+                padding: 10px;
+                border : 2px solid ivory;
+            }
+            
+            #container {
+                /*border: 1px solid red;*/
+            }
+            
+        </style>
+    </head>
+    
+    <body >
+        
+        <script>
+            var direction = ["right", "down", "left", "up"];
+            var key;
+            var gameOn = true;
+            var score = new component(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+            
+            function createArena()
+            {
+                parent.document.addEventListener("keydown", keyManager);
+                document.addEventListener("keydown", keyManager);
+                arena.init();
+                //highScore.init();
+                arena.hof();
+                //arena.start();
+                //worm.start();
+                //pomme.new();
+            } 
+            
+            function keyManager(event)
+            {
+                document.getElementById("data5").innerHTML = event.key;
+                key = event.key;
+                if (!gameOn)
+                {
+                    switch (key)
+                    {
+                        case "Enter":
+                            alert("ok");
+                            document.getElementById("info1").innerHTML = "you pressed Enter and game is off";
+                            key = null;
+                            //arena.inputname.blur();
+                            arena.inputname.setAttribute("disabled", "true");
+                            //document.focus();
+                            arena.inputname.style.visibility = "hidden";
+                            arena.hof();
+                            gameOn=true;
+                            break;
+                    }
+                }
+
+                if (gameOn)
+                {
+                    switch (key)
+                    {
+                        case " ":
+                            key = null;        
+                            restartGame();
+                            break;
+                        case "x":
+                            key = null;
+                            fluxdata();
+                            //arena.inputname.focus();
+                            break;
+                        case "Enter":
+                            key = null;
+                            document.getElementById("info1").innerHTML = "you pressed Enter";
+                            break;
+                    }
+                }
+            }
+            
+            var arena = {
+                canvas : document.createElement("canvas"),
+                container : document.createElement("div"),
+                form : document.createElement("form"),
+                iframe : document.createElement("iframe"),
+                inputname : document.createElement("input"),
+                inputscore : document.createElement("input"),
+                frame : "0",
+                init : function()
+                {
+                    //CONTAINER INIT
+                    //container style
+                    this.container.style.display = "block";
+                    this.container.style.margin = "auto";
+                    this.container.style.backgroundColor = "white";
+                    this.container.style.height = "400px";
+                    this.container.style.width = "400px";
+                    
+                    //container insertion
+                    document.body.insertBefore(this.container, document.body.childNodes[0]);
+                    
+                    //CANVAS INIT
+                    //canvas style
+                    this.canvas.style.display = "inline";
+                    this.canvas.width = 400;
+                    this.canvas.height = 400;
+                    this.canvas.style.backgroundColor = "black";
+                    //this.canvas.style.border = "2px solid red"
+                    
+                    //canvas context
+                    this.context = this.canvas.getContext("2d");
+                    this.context.font = "40px Arial";
+                    this.context.textAlign = "center";
+                    
+                    //canvas insertion
+                    this.container.appendChild(this.canvas);
+                    
+                    //IFRAME INIT
+                    //iframe attribut
+                    this.iframe.setAttribute("name", "iframe_target");
+                    this.iframe.width = "400px";
+                    this.iframe.height = "400px";
+                    
+                    //iframe style
+                    this.iframe.style.display = "inline";
+                    this.iframe.style.position = "relative";
+                    this.iframe.style.bottom = "400px";
+                    //this.iframe.style.border = "2px solid pink";
+                    //this.iframe.style.backgroundColor = "black";
+                    //this.iframe.style.overflow = "hidden";
+                    this.iframe.style.visibility = "visible";
+                    //this.iframe.style.zIndex = "-1";
+                    
+                    //iframe insertion
+                    this.container.appendChild(this.iframe);
+                    
+                    //INPUTNAME INIT
+                    //inputname style
+                    this.inputname.style.display = "inline";
+                    this.inputname.style.position = "relative";
+                    this.inputname.style.visibility = "hidden";
+                    
+                    this.inputname.style.width = this.canvas.width / 2 + "px";
+                    this.inputname.style.bottom =  this.canvas.height * (4/3) + "px";
+                    this.inputname.style.left = ( this.canvas.width / 4 ) + "px";
+                    
+                    this.inputname.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
+                    //this.inputname.style.border = "1px solid blue";
+                    this.inputname.style.fontSize = this.canvas.height / 18 + "px";
+                    //this.inputname.style.textTransform = "uppercase";
+                    this.inputname.style.textAlign = "center";
+                    
+                    //inputname attribut
+                    this.inputname.setAttribute("type", "text");
+                    this.inputname.setAttribute("autocomplete", "off");
+                    this.inputname.name = "nom";
+                    this.inputname.maxLength = "8";
+                    
+                    //this.inputname.addEventListener("keydown", keyManager);
+                    //inputname insertion
+                    this.form.appendChild(this.inputname);
+                    
+                    //INPUTSCORE INIT
+                    //inputscore attribut
+                    this.inputscore.setAttribute("type", "text");
+                    this.inputscore.setAttribute("scrolling", "no");
+                    this.inputscore.setAttribute("overflow", "hidden");
+                    this.inputscore.name = "score";
+                    
+                    //inputscore style
+                    this.inputscore.style.visibility = "hidden";
+                                        
+                    //input.score insertion
+                    this.form.appendChild(this.inputscore);
+                    
+                    //FORM INIT
+                    //form attribut
+                    this.form.action = "hof.php";
+                    this.form.method = "post";
+                    this.form.target= "iframe_target";
+                    
+                    //form insertion
+                    this.container.appendChild(this.form);
+                    
+                },
+                start : function() {
+                    this.iframe.style.visibility = "hidden";
+                    this.frame = 0;
+                    this.interval = setInterval(updateArena, 20);
+                },
+                stop : function() {
+                    clearInterval(this.interval);
+                },
+                clear : function() {
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                },
+                draw : function() {
+                    this.context.beginPath();
+                    var colonne = this.canvas.width / 10;
+                    for ( var i = 0; i<11; i++) {
+                        this.context.moveTo(i * colonne, 0);
+                        this.context.lineTo(i * colonne, this.canvas.height);    
+                        this.context.moveTo(0, i * colonne);
+                        this.context.lineTo(this.canvas.width, i * colonne);    
+                    }
+                    this.context.strokeStyle = "#700";
+                    this.context.stroke();
+                },
+                gameOver : function() {
+                    //stop arene
+                    this.stop();
+                    info("gameOver");
+                    
+                    //affiche texte Game over + score
+                    this.context.fillStyle = "white";
+                    this.context.fillText("GAME OVER", this.canvas.width / 2, this.canvas.height / 3);
+                    this.context.fillText("score " + score.value, this.canvas.width / 2, this.canvas.height / 2);
+                                        
+                    //affiche .inputname, Enter => post score + nom
+                    this.inputscore.value = score.value;
+                    this.inputname.style.visibility = "visible";
+                    this.inputname.focus();
+                },
+                hof : function(){
+                    //nettoie et affiche arene
+                    this.clear();
+                    this.draw();
+                    
+                    //inputname.value contient le nom
+                    //score.value.contient le score
+                    this.form.name = inputname.value;
+                    this.form.submit();
+                    this.iframe.style.visibility = "visible";
+                }
+            }
+            
+            var pomme = {
+                size : 0,
+                new : function() {
+                    var test = false;
+                    while (!test) {
+                        var x = rnd(0, 9);
+                        var y = rnd(0, 9);
+                     
+                        test = true;    
+                        for (var i = 0; i < worm.body.length; i++) {
+                            if (x != worm.body[i].x) { continue; }
+                            if (y != worm.body[i].y) { continue; }
+                            test = false;
+                        }
+                    }
+                    this.body = new component(x, y, 40,"red", "draw");
+                    document.getElementById("data6").innerHTML = "new pomme : " + x + " ," + y;
+                    this.size++;
+                }
+            }
+            
+            var worm = {
+                start : function() {
+                    this.direction = 0;
+                    this.grow = 0;
+                    //this.body = null;
+                    this.body = [new component( 4, 4, 40, "yellow", "draw")];
+                },
+                draw : function() {
+                    for (var i=0; i < this.body.length; i++) {
+                        this.body[i].draw();
+                    }
+                },
+                turn : function() {
+                    //teste global.key et change .direction
+                    if (key == "ArrowRight") {
+                        this.direction++;
+                        if (this.direction > 3) {
+                            this.direction = 0;
+                        }
+                    }
+                    if (key == "ArrowLeft") {
+                        this.direction--;
+                        if (this.direction < 0) {
+                            this.direction = 3;
+                        }
+                    }
+                    key = null;
+                },
+                move : function() {
+                    //mofifie direction
+                    this.turn();
+                    //cree et insere copie de la tete
+                    var x = worm.body[0].x;
+                    var y = worm.body[0].y;
+                    this.body.splice(1, 0, new component(x, y, 40, "green", "draw"));
+                    //deplace tete
+                    this.body[0].move(direction[this.direction]);
+                    //si collision retour
+                    if (this.testCollision()) {
+                        return;
+                    }
+                    //si .grow=0 coupe la bout de la queue et retour
+                    if (this.grow == 0) {
+                        this.body.pop();
+                        return;
+                    }
+                    //sinon .grow-- et retour
+                    this.grow--;
+                    return;
+                },
+                testCollision : function(){
+                    //test sortie plateau
+                    if (worm.body[0].x < 0 || worm.body[0].x > 9 || worm.body[0].y < 0 || worm.body[0].y > 9) {
+                        //arena.gameOver();
+                        gameOn = false;
+                        return true;
+                    }
+                    //test auto-collision
+                    for (var i = 1; i < worm.body.length; i++) {
+                        if (worm.body[0].x == worm.body[i].x && worm.body[0].y == worm.body[i].y) {
+                            //arena.gameOver();
+                            gameOn = false;
+                            return true;
+                        }
+                    }
+                    //test collision pomme
+                    if (worm.body[0].x == pomme.body.x && worm.body[0].y == pomme.body.y) {
+                        this.grow += pomme.size;
+                        pomme.new();
+                    }
+                    return false;
+                }
+            }
+                      
+            function restartGame() {
+                gameOn = true;
+                score.value = 0;
+                worm.start();
+                arena.stop();
+                arena.start();
+                pomme.size = 0;
+                pomme.new();
+            }
+            
+            function updateArena() {
+                //CLEAR AND DRAW ARENA
+                arena.clear();
+                arena.draw();
+                
+                //IN GAME
+                //GAME END : redessine plateau sans score
+                if (!gameOn) {
+                    
+                    pomme.body.draw();
+                    //on repeint le premier anneau en yellow
+                    worm.body.shift();
+                    worm.body[0].color = "yellow";
+                    worm.draw();
+                    
+                    arena.gameOver();
+                }
+                //GAME ON
+                if (gameOn) {
+                                
+                    //DRAW COMPONENTS
+                    pomme.body.draw();
+                    worm.draw(); 
+                    score.value = (worm.body.length - 1);
+                    score.draw();
+
+                    //COMPTEUR FRAME//
+                    arena.frame++;
+                    if ((arena.frame / 10) % 1 == 0) {
+                        worm.move();
+                    }
+                }
+                
+            }
+            
+            function rnd(mini, maxi) {
+                var num = Math.trunc(Math.random() * (maxi-mini) + mini);
+                
+                return num;
+            }
+            
+            function component(x, y, size, color, type) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.type = type;
+                this.value = 0;
+                this.size = size;
+                this.draw = function() {
+                    if (this.type == "draw") {
+                        arena.context.fillStyle = this.color;
+                        arena.context.fillRect(this.x * 40, this.y *40, size, size);
+                    }
+                    if (this.type == "text") {
+                        arena.context.font = this.size + "px Arial";
+                        arena.context.fillStyle = this.color;
+                        arena.context.fillText(this.value, 50, 50);
+                    }
+                }
+                this.move = function(direction) {
+                    if (direction == "right") {
+                        this.x++;
+                    }
+                    if (direction == "left") {
+                        this.x--;
+                    }
+                    if (direction == "up") {
+                        this.y--;
+                    }
+                    if (direction == "down") {
+                        this.y++;
+                    }
+                }
+            }
+          
+        </script>
+
+   
+    <div class="footer">
+        
+        <table class="tableGame" >
+            <tr>
+                <td>info 1</td>
+                <td id='info1'></td>
+            </tr>
+            <tr>
+                <td>worm.body.length</td>
+                <td id='data1'></td>
+            </tr>
+            <tr>
+                <td>worm.direction</td>
+                <td id='data2'></td>
+            </tr>
+            <tr>
+                <td>frame</td>
+                <td id='data3'></td>
+            </tr>
+            <tr>
+                <td>worm.body[0]</td>
+                <td id='data4'></td>
+            </tr>
+            <tr>
+                <td>key</td>
+                <td id='data5'></td>
+            </tr>
+            <tr>
+                <td>pomme occur.</td>
+                <td id='data6'></td>
+            </tr>
+        </table>
+        
+        
+        
+        <button type="button" onclick="action()">ACTION</button>
+       
+    </div>
+        
+
+        <script>
+            createArena();
+            info("copy");
+            
+            function action() {
+                if ( arena.iframe.style.visibility == "visible" ) {
+                    arena.iframe.style.visibility = "hidden";
+                } else {
+                    arena.iframe.style.visibility = "visible";
+                }
+            }
+            
+            function info(data) {
+                document.getElementById("info1").innerHTML = data;
+            }
+            
+            function fluxdata() {
+                    document.getElementById('data1').innerHTML = worm.body.length;
+                    document.getElementById('data2').innerHTML = worm.direction;
+                    document.getElementById('data3').innerHTML = arena.frame;
+                    document.getElementById('data4').innerHTML = worm.body[0];
+                    //document.getElementById('data4').innerHTML = pomme.body.x + ", " + pomme.body.y;
+            }
+        </script>
+
+</body> 
+</html>
