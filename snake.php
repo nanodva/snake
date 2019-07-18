@@ -33,7 +33,6 @@
 
 
 	<script>
-
 		var direction = ["right", "down", "left", "up"];
 		var key;
 		var arena;
@@ -53,7 +52,7 @@
 			arena.draw();
 			menu.init();
 			menu.show();
-			debug.init();
+			// debug.init();
 			// menu.intro();
 			// info("initialized");
 
@@ -376,7 +375,7 @@
 			container : document.createElement("div"),
 			canvas : document.createElement("canvas"),
 			form : document.createElement("form"),
-			if_menu : document.createElement("iframe"),
+			if_score : document.createElement("iframe"),
 			// if_debug : document.createElement("iframe"),
 			input : document.createElement("input"),
 			inputscore : document.createElement("input"),
@@ -392,24 +391,24 @@
 				//CONTAINER INIT
 				this.container.style.height = this.height + "px";
 				this.container.style.width = this.width + "px";
-				this.container.style.border = "2px solid yellow";
+				// this.container.style.border = "2px solid yellow";
 				// document.body.insertBefore(this.container, document.body.childNodes[1]);
 				document.body.appendChild(this.container);
 				
-				// if_menu: iframe use to display highscore and info
+				// if_score: iframe use to display highscore and info
 				// position
-				this.if_menu.style.position = "absolute";
-				this.if_menu.style.height = this.height + "px";
-				this.if_menu.style.width = this.width + "px";
+				this.if_score.style.position = "absolute";
+				this.if_score.style.height = this.height + "px";
+				this.if_score.style.width = this.width + "px";
 				// style
-				this.if_menu.border = "no";
-				this.if_menu.scrolling = "no";
-				this.if_menu.style.visibility = "hidden";
+				this.if_score.border = "no";
+				this.if_score.scrolling = "no";
+				this.if_score.style.visibility = "hidden";
 				// target and metadata
-				this.if_menu.src="./show_highscores.php";
-				this.if_menu.name = "if_menu"
+				this.if_score.src="./show_highscores.php";
+				this.if_score.name = "if_score"
 				// insertion
-				this.container.appendChild(this.if_menu);
+				this.container.appendChild(this.if_score);
 
 				
 				// CANVAS INIT
@@ -455,7 +454,7 @@
 				this.input.style.left = ( this.canvas.width / 4 ) + "px";
 				// input colors
 				this.input.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
-				this.input.style.border = "2px solid yellow";
+				// this.input.style.border = "2px solid yellow";
 				// input font style
 				this.input.style.fontSize = this.canvas.height / 18 + "px";
 				this.input.style.color = "white";
@@ -487,12 +486,17 @@
 				this.container.style.zIndex = "2";
 			},
 			show : function() {
-				this.container.style.visibility = "visible";
-				// this.if_menu.style.visibility = "hidden";
+				// show menu
+				// this.if_score.src = this.if_score.src;
+				// this.if_score.style.visibility = "visible";
+				setTimeout( function() {
+					menu.if_score.src = menu.if_score.src;
+					menu.if_score.style.visibility = "visible";
+				}, 1000);
 			},
 			hide : function() {
 				// hide menu
-				this.if_menu.style.visibility = "hidden";
+				this.if_score.style.visibility = "hidden";
 			},
 			clear : function() {
 				// this.context.fillStyle = "hsla(20, 100%, 0%, 100%)";
@@ -540,52 +544,53 @@
 				this.input.value = null;
 				this.clear();
 				wait_for_submit = false;
-				setTimeout(this.show, 2000);
+				// setTimeout(this.show, 2000);
+				this.show();
 				// this.show();
 			},
 		}
 
-		var debug = {
-			container : document.createElement("div"),
-			if_debug : document.createElement("iframe"),
-			height : 400,
-			width : 400,
-			font_size : 40,
-			init : function() {
-				//CONTAINER INIT
-				this.container.style.height = this.height + "px";
-				this.container.style.width = this.width + "px";
-				this.container.style.border = "2px solid red";
-				document.body.appendChild(this.container);
+		// var debug = {
+		// 	container : document.createElement("div"),
+		// 	if_debug : document.createElement("iframe"),
+		// 	height : 400,
+		// 	width : 400,
+		// 	font_size : 40,
+		// 	init : function() {
+		// 		//CONTAINER INIT
+		// 		this.container.style.height = this.height + "px";
+		// 		this.container.style.width = this.width + "px";
+		// 		this.container.style.border = "2px solid red";
+		// 		document.body.appendChild(this.container);
 				
 				
-				// if_debug: iframe use to display debug info
-				// position
-				this.if_debug.style.position = "absolute";
-				this.if_debug.style.height = this.height + "px";
-				this.if_debug.style.width = this.width + "px";
-				// style
-				this.if_debug.border = "no";
-				this.if_debug.src="./show_highscores.php";
-				// target and metadata
-				this.if_debug.scrolling = "no";
-				this.if_debug.name = "if_debug"
-				// insertion
-				this.container.appendChild(this.if_debug);
+		// 		// if_debug: iframe use to display debug info
+		// 		// position
+		// 		this.if_debug.style.position = "absolute";
+		// 		this.if_debug.style.height = this.height + "px";
+		// 		this.if_debug.style.width = this.width + "px";
+		// 		// style
+		// 		this.if_debug.border = "no";
+		// 		this.if_debug.src="./show_highscores.php";
+		// 		// target and metadata
+		// 		this.if_debug.scrolling = "no";
+		// 		this.if_debug.name = "if_debug"
+		// 		// insertion
+		// 		this.container.appendChild(this.if_debug);
 
 				
 
-				// this.container.style.zIndex = "2";
-			},
-			show : function() {
-				// document.getElementById("info1").innerHTML = "show highscore";
-				// this.if_menu.style.visibility = "visible";
-			},
-			hide : function() {
-				// hide menu
-				this.if_menu.style.visibility = "hidden";
-			}
-		}
+		// 		// this.container.style.zIndex = "2";
+		// 	},
+		// 	show : function() {
+		// 		// document.getElementById("info1").innerHTML = "show highscore";
+		// 		// this.if_score.style.visibility = "visible";
+		// 	},
+		// 	hide : function() {
+		// 		// hide menu
+		// 		this.if_score.style.visibility = "hidden";
+		// 	}
+		// }
 
 
 		init();
@@ -626,6 +631,7 @@
 				<td id='data6'></td>
 			</tr>
 		</table>
+		<iframe display="block" name="if_debug" width="800px" height="400px"></iframe>
 		
 	</div>
 

@@ -25,10 +25,11 @@
 	$table = "score";
 
 	$fmt="%s: %s</br>";
-	printf($fmt, "name", $_POST["name"]);
-	printf($fmt, "name", $_POST["score"]);
 	$name=$_POST["name"];
 	$score=$_POST["score"];
+	// printf($fmt, "name", $_POST["name"]);
+	printf($fmt, "name", "$name");
+	printf($fmt, "score", "$score");
 
 	echo "</br><b>opening database..</b></br>";
 	$conn = new mysqli($servername, $username, $password, $database);

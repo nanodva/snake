@@ -52,15 +52,12 @@
 		.footer {
 			font-size: 24px;
 			width: 400px;
-			/*margin: auto;*/
-			/*position: relative;*/
 			position: absolute;
-			/*display: inline-block;*/
 			text-align: center;
 			bottom: 32px;
-			border: 1px solid yellow;
-
+			/*border: 1px solid yellow;*/
 		}
+
 	</style>
 </head>
 <body>
@@ -84,7 +81,7 @@
 		}
 
 		// query for scores
-		$query="SELECT name,score FROM score ORDER BY score DESC";
+		$query="SELECT name,score FROM score ORDER BY score DESC LIMIT 10";
 		$result=mysqli_query($conn,$query);
 
 		// display scores list
