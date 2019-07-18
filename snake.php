@@ -233,7 +233,6 @@
 				this.canvas.width = this.width;
 				this.canvas.height = this.height;
 				this.canvas.style.backgroundColor = "black";
-				// this.canvas.style.border = "2px solid green"
 				// canvas context
 				this.context = this.canvas.getContext("2d");
 				this.context.font = this.font_size + "px Arial";
@@ -391,7 +390,6 @@
 				//CONTAINER INIT
 				this.container.style.height = this.height + "px";
 				this.container.style.width = this.width + "px";
-				// this.container.style.border = "2px solid yellow";
 				// document.body.insertBefore(this.container, document.body.childNodes[1]);
 				document.body.appendChild(this.container);
 				
@@ -416,7 +414,6 @@
 				// this.canvas.d
 				this.canvas.width = this.width;
 				this.canvas.height = this.height;
-				// this.canvas.style.border = "2px solid green"
 				// canvas context
 				this.context = this.canvas.getContext("2d");
 				this.context.font = this.font_size + "px Arial";
@@ -454,13 +451,13 @@
 				this.input.style.left = ( this.canvas.width / 4 ) + "px";
 				// input colors
 				this.input.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
-				// this.input.style.border = "2px solid yellow";
 				// input font style
 				this.input.style.fontSize = this.canvas.height / 18 + "px";
 				this.input.style.color = "white";
 				this.input.style.textTransform = "uppercase";
 				this.input.style.textAlign = "center";
 				this.input.maxLength = "8";
+				this.input.style.visibility = "hidden";
 				//input attribut
 				this.input.setAttribute("type", "text");
 				this.input.setAttribute("autocomplete", "off");
@@ -486,9 +483,7 @@
 				this.container.style.zIndex = "2";
 			},
 			show : function() {
-				// show menu
-				// this.if_score.src = this.if_score.src;
-				// this.if_score.style.visibility = "visible";
+				// wait for mysqli update and reload highscores
 				setTimeout( function() {
 					menu.if_score.src = menu.if_score.src;
 					menu.if_score.style.visibility = "visible";
@@ -504,94 +499,46 @@
 			},
 			game_over : function (){
 				info("game over");
-
-				// needed for 
-				wait_for_submit = true
-				
-				//affiche texte Game over + score
 				this.context.fillStyle = "white";
+				//affiche texte Game over
 				xpos = this.canvas.width * 1/2;
 				ypos = this.canvas.height * 1/3;
 				msg = "Game over";
 				this.context.fillText(msg, xpos, ypos);
-				
-				// xpos = this.canvas.width / 2;
-				// ypos = this.canvas.height / 2;
+				// disply score
 				ypos += this.font_size * 2;
 				msg = "score " + score.value;
 				this.context.fillText(msg, xpos, ypos);
-
-				ypos += this.font_size;
-				msg = "frames " + arena.frame;
-				this.context.fillText(msg, xpos, ypos);
-				this.canvas.style.visibility = "visible";
+				// display frames				
+				// ypos += this.font_size;
+				// msg = "frames " + arena.frame;
+				// this.context.fillText(msg, xpos, ypos);
+				// this.canvas.style.visibility = "visible";
 							
 				// ask for player name
-				this.input.focus();
 				this.input.style.visibility = "visible";
-
+				this.input.focus();
+				// press Enter to submit	
 				wait_for_submit = true;
 			},
 			submit_score : function(){
-				//input.value contient le nom
-				// this.form.name = this.input.value;
+				// retrieve playername entry
 				this.form["name"].value = this.input.value;
-				//score.value.contient le score
-				// this.form.score = score.value;
+				// retrieve current score
 				this.inputscore.value = score.value;
+				// send score
 				this.form.submit();
+
+				// reset input
+				this.input.style.visibility = "hidden";
 				this.input.blur();
 				this.input.value = null;
+				//
 				this.clear();
 				wait_for_submit = false;
-				// setTimeout(this.show, 2000);
 				this.show();
-				// this.show();
 			},
 		}
-
-		// var debug = {
-		// 	container : document.createElement("div"),
-		// 	if_debug : document.createElement("iframe"),
-		// 	height : 400,
-		// 	width : 400,
-		// 	font_size : 40,
-		// 	init : function() {
-		// 		//CONTAINER INIT
-		// 		this.container.style.height = this.height + "px";
-		// 		this.container.style.width = this.width + "px";
-		// 		this.container.style.border = "2px solid red";
-		// 		document.body.appendChild(this.container);
-				
-				
-		// 		// if_debug: iframe use to display debug info
-		// 		// position
-		// 		this.if_debug.style.position = "absolute";
-		// 		this.if_debug.style.height = this.height + "px";
-		// 		this.if_debug.style.width = this.width + "px";
-		// 		// style
-		// 		this.if_debug.border = "no";
-		// 		this.if_debug.src="./show_highscores.php";
-		// 		// target and metadata
-		// 		this.if_debug.scrolling = "no";
-		// 		this.if_debug.name = "if_debug"
-		// 		// insertion
-		// 		this.container.appendChild(this.if_debug);
-
-				
-
-		// 		// this.container.style.zIndex = "2";
-		// 	},
-		// 	show : function() {
-		// 		// document.getElementById("info1").innerHTML = "show highscore";
-		// 		// this.if_score.style.visibility = "visible";
-		// 	},
-		// 	hide : function() {
-		// 		// hide menu
-		// 		this.if_score.style.visibility = "hidden";
-		// 	}
-		// }
-
 
 		init();
 	</script>
