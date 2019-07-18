@@ -476,7 +476,8 @@
 				this.form.action = "submit_score.php";
 				this.form.onsubmit = on_submit()
 				this.form.method = "post";
-				this.form.target = "if_debug";
+				// this.form.target = "if_debug";
+				this.form.target = "if_score";
 				
 				//form insertion
 				this.container.appendChild(this.form);
