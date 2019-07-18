@@ -450,7 +450,7 @@
 				this.input.style.top =  this.canvas.height * 0.75 + "px";
 				this.input.style.left = ( this.canvas.width / 4 ) + "px";
 				// input colors
-				this.input.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
+				this.input.style.backgroundColor = "hsla(20, 40%, 0%, 60%)";
 				// input font style
 				this.input.style.fontSize = this.canvas.height / 18 + "px";
 				this.input.style.color = "white";
