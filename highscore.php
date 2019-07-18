@@ -85,13 +85,11 @@
 			$name=$_POST["name"];
 			$score=$_POST["score"];
 			// skip empty name
-			echo "registering new score<br>";
-			echo "  $name -- $score<br>";
+			// echo "registering new score<br>";
 			$query="INSERT INTO $table (name,score) VALUES ('$name',$score)";
-			echo "query: $query<br>";
-			if (mysqli_query($conn,$query)) {
-				echo "add score: $name $score<br>";
-			} else {
+			if ( ! mysqli_query($conn,$query)) {
+				echo "  $name -- $score<br>";
+				echo "query: $query<br>";
 				$err=mysqli_error($conn);
 				echo "error: $err<br>";
 			}
