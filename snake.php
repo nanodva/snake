@@ -33,9 +33,11 @@
 
 
 	<script>
+		// direction for components
 		var direction = ["right", "down", "left", "up"];
+		// key event 
 		var key;
-		var arena;
+		// var arena;
 		var game_is_running = false;
 		var game_is_over = false;
 		var wait_for_submit = false;
@@ -43,7 +45,6 @@
 		
 		function init()
 		{
-			// info("initializing");
 			// start listening to keyboard
 			parent.document.addEventListener("keydown", keyManager);
 			document.addEventListener("keydown", keyManager);
@@ -52,10 +53,6 @@
 			arena.draw();
 			menu.init();
 			menu.show();
-			// debug.init();
-			// menu.intro();
-			// info("initialized");
-
 		} 
 		
 		function keyManager(event)
@@ -94,13 +91,7 @@
 				switch (event.key) {
 				case "Enter":
 					document.getElementById("info1").innerHTML = "start game";
-					//arena.input.blur();
-					// arena.input.setAttribute("disabled", "true");
-					//document.focus();
-					// arena.input.style.visibility = "hidden";
-					// arena.draw();
 					game_start();
-					// game_is_running=true;
 					break;
 				}
 			}
@@ -215,7 +206,7 @@
 			height : 400,
 			width : 400,
 			// arena square division
-			division: 16,
+			division: 10,
 			// ouput style
 			font_size : 40,
 			// millseconds beetween frame
