@@ -13,6 +13,9 @@
 			margin: 0;
 			border: none;
 		}
+		body {
+			color: white;
+		}
 	</style>
 </head>
 
