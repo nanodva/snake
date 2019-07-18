@@ -232,7 +232,8 @@
 				// CANVAS INIT
 				this.canvas.width = this.width;
 				this.canvas.height = this.height;
-				this.canvas.style.backgroundColor = "black";
+				// this.canvas.style.backgroundColor = "black";
+				this.canvas.style.backgroundColor = "grey";
 				// canvas context
 				this.context = this.canvas.getContext("2d");
 				this.context.font = this.font_size + "px Arial";
