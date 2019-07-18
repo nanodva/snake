@@ -22,9 +22,9 @@
 <body>
 <?php
 	$servername = "localhost";
-	$username = "root";
+	$username = "snake";
 	$password = "";
-	$database = "score_db";
+	$database = "snake_db";
 	$table = "score";
 
 	$fmt="%s: %s</br>";

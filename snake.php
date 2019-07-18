@@ -404,7 +404,7 @@
 				this.if_score.scrolling = "no";
 				this.if_score.style.visibility = "hidden";
 				// target and metadata
-				this.if_score.src="./show_highscores.php";
+				this.if_score.src="./highscore.php";
 				this.if_score.name = "if_score"
 				// insertion
 				this.container.appendChild(this.if_score);
@@ -474,7 +474,8 @@
 				this.form.appendChild(this.inputscore);
 
 				//form attribut
-				this.form.action = "submit_score.php";
+				// this.form.action = "submit_score.php";
+				this.form.action = "highscore.php";
 				this.form.onsubmit = on_submit()
 				this.form.method = "post";
 				// this.form.target = "if_debug";
@@ -487,14 +488,8 @@
 			show : function() {
 				// wait for mysqli update and reload highscores
 				this.if_score.style.visibility = "visible";
-				// this.if_score.src = null;
-				// refresh = setInterval(function() {menu.if_score.src = menu.if_score.src;}, 50);
-				setTimeout( function() {
-					// menu.if_score.src = menu.if_score.src;
-					menu.if_score.src="./show_highscores.php";
-					// menu.if_score.style.visibility = "visible";
-				}, 5000);
-				// clearInterval(refresh);
+				// this.if_score.src = this.if_score.src;
+				// this.if_score.src="./highscore.php";
 			},
 			hide : function() {
 				// hide menu
@@ -535,6 +530,7 @@
 				this.inputscore.value = score.value;
 				// send score
 				this.form.submit();
+				// this.if_score.style.visibility = "visible";
 
 				// reset input
 				this.input.style.visibility = "hidden";
