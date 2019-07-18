@@ -80,18 +80,20 @@
 			echo "<!-- mysql connected -->";
 		}
 
-		// test is new score in post
-		if ( isset($_POST["score"]) and strlen($_POST["name"]) > 0) {
+		// store new score if new score in POST
+		if ( isset($_POST["score"]) and isset($_POST["name"])) {
 			$name=$_POST["name"];
 			$score=$_POST["score"];
-			// skip empty name
-			// echo "registering new score<br>";
-			$query="INSERT INTO $table (name,score) VALUES ('$name',$score)";
-			if ( ! mysqli_query($conn,$query)) {
-				echo "  $name -- $score<br>";
-				echo "query: $query<br>";
-				$err=mysqli_error($conn);
-				echo "error: $err<br>";
+			if ( $score > 0 and strlen("$name") > 0) {
+				// skip empty name
+				// echo "registering new score<br>";
+				$query="INSERT INTO $table (name,score) VALUES ('$name',$score)";
+				if ( ! mysqli_query($conn,$query)) {
+					echo "  $name -- $score<br>";
+					echo "query: $query<br>";
+					$err=mysqli_error($conn);
+					echo "error: $err<br>";
+				}
 			}
 		}
 

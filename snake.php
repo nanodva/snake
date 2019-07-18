@@ -215,9 +215,11 @@
 			height : 400,
 			width : 400,
 			// arena square division
-			division: 10,
+			division: 16,
 			// ouput style
 			font_size : 40,
+			// millseconds beetween frame
+			speed : 17,
 			// insert arena object in page
 			init : function() {
 				//CONTAINER INIT
@@ -265,7 +267,7 @@
 			start : function() {
 				// this.iframe.style.visibility = "hidden";
 				this.frame = 0;
-				this.interval = setInterval(game_loop, 20);
+				this.interval = setInterval(game_loop, this.speed);
 			},
 			stop : function() {
 				// stop loop
