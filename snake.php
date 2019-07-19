@@ -41,6 +41,9 @@
 		var game_is_running = false;
 		var game_is_over = false;
 		var wait_for_submit = false;
+		var division = 12;
+		var width = 400;
+		var height = width;
 		var score = new component(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
 		
 		function init()
@@ -156,10 +159,13 @@
 			this.type = type;
 			this.value = 0;
 			this.size = size;
+			// square side lenght
+			// this.len = width / division;
 			this.draw = function() {
 				if (this.type == "draw") {
 					arena.context.fillStyle = this.color;
-					arena.context.fillRect(this.x * 40, this.y *40, size, size);
+					// arena.context.fillRect(this.x * 40, this.y *40, size, size);
+					arena.context.fillRect(this.x * size, this.y * size, size, size);
 				}
 				if (this.type == "text") {
 					arena.context.font = this.size + "px Arial";
@@ -206,7 +212,7 @@
 			height : 400,
 			width : 400,
 			// arena square division
-			division: 10,
+			division: division,
 			// ouput style
 			font_size : 40,
 			// millseconds beetween frame
@@ -272,31 +278,38 @@
 		
 		var pomme = {
 			size : 0,
+			len : width / division,
+
 			new : function() {
 				var test = false;
 				while (!test) {
-					var x = rnd(0, 9);
-					var y = rnd(0, 9);
+					// generate rnd coordinates
+					var x = rnd(0, division - 1);
+					var y = rnd(0, division - 1);
 				 
-					test = true;    
+					test = true;
+					// test case is available
 					for (var i = 0; i < worm.body.length; i++) {
 						if (x != worm.body[i].x) { continue; }
 						if (y != worm.body[i].y) { continue; }
 						test = false;
 					}
 				}
-				this.body = new component(x, y, 40,"red", "draw");
+				// this.body = new component(x, y, 40,"red", "draw");
+				// generate apple
+				this.body = new component(x, y, this.len,"orange", "draw");
 				document.getElementById("data6").innerHTML = "new pomme : " + x + " ," + y;
 				this.size++;
 			}
 		}
 		
 		var worm = {
+			len : width / division,
 			start : function() {
 				this.direction = 0;
 				this.grow = 0;
 				//this.body = null;
-				this.body = [new component( 4, 4, 40, "yellow", "draw")];
+				this.body = [new component( 4, 4, this.len, "yellow", "draw")];
 			},
 			draw : function() {
 				for (var i=0; i < this.body.length; i++) {
@@ -324,7 +337,7 @@
 				//cree et insere copie de la tete
 				var x = worm.body[0].x;
 				var y = worm.body[0].y;
-				this.body.splice(1, 0, new component(x, y, 40, "green", "draw"));
+				this.body.splice(1, 0, new component(x, y, this.len, "green", "draw"));
 				//deplace tete
 				this.body[0].move(direction[this.direction]);
 				//si collision retour
@@ -342,7 +355,7 @@
 			},
 			testCollision : function(){
 				//test sortie plateau
-				if (worm.body[0].x < 0 || worm.body[0].x > 9 || worm.body[0].y < 0 || worm.body[0].y > 9) {
+				if (worm.body[0].x < 0 || worm.body[0].x > division -1 || worm.body[0].y < 0 || worm.body[0].y > division -1 ) {
 					game_is_running = false;
 					return true;
 				}
