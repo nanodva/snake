@@ -1,26 +1,18 @@
 // CLASSES
-class element {
-  constructor(x, y, size, color, type) {
+class Element {
+  constructor(x, y, size, color) {
     this.x = x;
     this.y = y;
     this.color = color;
-    this.type = type; 
     this.value = 0;   // ??
     this.size = size; // square side lenght
   }
   draw() {
-    if (this.type == "draw") {
-      // rect color
-      arena.context.fillStyle = this.color;
-      var xo = this.x * this.size;
-      var yo = this.y * this.size;
-      arena.context.fillRect(xo, yo, this.size, this.size);
-    }
-    if (this.type == "text") {
-      arena.context.fillStyle = this.color;
-      arena.context.font = this.size + "px Arial";
-      arena.context.fillText(this.value, 50, 50);
-    }
+    // rect color
+    arena.context.fillStyle = this.color;
+    var xo = this.x * this.size;
+    var yo = this.y * this.size;
+    arena.context.fillRect(xo, yo, this.size, this.size);
   }
   move(direction) {
     if (direction == "right") {
@@ -36,7 +28,23 @@ class element {
       this.y++;
     }
   }
-} 
+}
+
+class Score {
+  constructor(x, y, size, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.size = size;   // font size
+    this.value = 0;     // score counter
+  }
+  draw() {
+    arena.context.fillStyle = this.color;
+    arena.context.font = this.size + "px Arial";
+    arena.context.fillText(this.value, 50, 50);
+  }
+}
+
 
 // DECLARATIONS
 var direction = ["right", "down", "left", "up"];  // direction for components
@@ -48,7 +56,8 @@ var division = 12;
 var width = 400;
 var height = width;
 var sqr_size = width / division;
-var score = new element(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+// var score = new Element(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+var score = new Score(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
 var refresh_rate = 10; // delay beetween two loops
 var game_speed = 10; // game speed 
 var loop = null; // interval loop
@@ -123,7 +132,7 @@ var arena = {
 }
 
 var apple = {
-  // power: how many elements will the apple add to the worm
+  // power: how many Elements will the apple add to the worm
   power : 0,
   new : function() {
     // generate a new apple
@@ -142,7 +151,7 @@ var apple = {
       }
     }
     // generate apple
-    this.body = new element(x, y, sqr_size, apple_color, "draw");
+    this.body = new Element(x, y, sqr_size, apple_color, "draw");
     document.getElementById("data6").innerHTML = "new apple : " + x + " ," + y;
     // this.size++;
     this.power++;
@@ -157,7 +166,7 @@ var worm = {
     this.direction = 0;
     this.grow = 0;
     //this.body = null;
-    this.body = [new element( 4, 4, sqr_size, head_color, "draw")];
+    this.body = [new Element( 4, 4, sqr_size, head_color, "draw")];
   },
   draw : function() {
     for (var i=0; i < this.body.length; i++) {
@@ -190,7 +199,7 @@ var worm = {
     //cree et insere copie de la tete
     var x = worm.body[0].x;
     var y = worm.body[0].y;
-    this.body.splice(1, 0, new element(x, y, sqr_size, body_color, "draw"));
+    this.body.splice(1, 0, new Element(x, y, sqr_size, body_color, "draw"));
     //deplace tete
     this.body[0].move(direction[this.direction]);
 
