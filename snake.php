@@ -305,8 +305,8 @@
 		
 		var worm = {
 			len : width / division,
-			head_color : "hsl(225, 15%, 70%)",
-			body_color : "hsl(225, 35%, 60%)",
+			head_color : yellow,
+			body_color : "hsl(225, 8%, 25%)",
 			start : function() {
 				this.direction = 0;
 				this.grow = 0;
