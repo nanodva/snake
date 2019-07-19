@@ -175,67 +175,44 @@ class Worm {
   }
 }
 
+class Arena {
+  constructor() {
+    // ouput style
+    this.font_size = 40;
 
-
-// DECLARATIONS
-var direction = ["right", "down", "left", "up"];  // direction for components
-var key = ""; // key event 
-var game_is_running = false;
-var game_is_over = false;
-var wait_for_submit = false;
-var division = 12;
-var width = 400;
-var height = width;
-var sqr_size = width / division;
-// var score = new Element(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
-var score = new Score(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
-var refresh_rate = 10; // delay beetween two loops
-var game_speed = 14; // game speed 
-var loop = null; // interval loop
-var head_color = "hsl(245, 12%, 92%)";
-var body_color = "hsl(225, 8%, 25%)";
-var apple_color = "hsl(0, 80%, 50%)";
-
-
-// OBJECTS
-var arena = {
-  canvas : document.createElement("canvas"),
-  container : document.createElement("div"),
-  frame : "0",
-  // ouput style
-  font_size : 40,
-
-  init : function() {
     //CONTAINER INIT
+    this.container = document.createElement("div");
     this.container.style.height = height + "px";
     this.container.style.width = width + "px";
     this.container.style.position = "absolute";
     this.container.style.zIndex = "-1";
-    
     //arena is the first object ref in this page
     document.body.insertBefore(this.container, document.body.childNodes[0]);
-    
+
     // CANVAS INIT
+    this.canvas = document.createElement("canvas");
     this.canvas.width = width;
     this.canvas.height = height;
     this.canvas.style.backgroundColor = "black";
-    // canvas context
+    //canvas insertion
+    this.container.appendChild(this.canvas);
+
+    // CANVAS CONYTEXT
     this.context = this.canvas.getContext("2d");
     this.context.font = this.font_size + "px Arial";
     this.context.textAlign = "center";
-    //canvas insertion
-    this.container.appendChild(this.canvas);
-  },
-  clear : function() {
+  }
+
+  clear() {
     // clean arena
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  },
-  draw : function() {
-    // squares dims 
-    // var square = this.canvas.width / division;
-    
+  }
+
+  draw() {
     // draw the arena background
-    ctx=this.context;
+    var ctx = this.context;
+
+    // clear cancas
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     // draw lines to delimit square sides
     ctx.beginPath();
@@ -250,42 +227,40 @@ var arena = {
     // execute drawings
     this.context.strokeStyle = "#700";
     this.context.stroke();
-  },
-  start : function() {
-    // start game loop
+  }
+  start() {
+    // start game
     this.frame = 0;
-    this.interval = setInterval(game_loop, refresh_rate);
-  },
-  stop : function() {
+    // this.interval = setInterval(game_loop, refresh_rate);
+  }
+  stop() {
     // stop game loop
     clearInterval(this.interval);
   }
 }
 
-var worm = new Worm();
-var apple = new Apple();
-
-var menu = {
-  container : document.createElement("div"),
-  canvas : document.createElement("canvas"),
-  form : document.createElement("form"),
-  if_score : document.createElement("iframe"),
-  // if_debug : document.createElement("iframe"),
-  input : document.createElement("input"),
-  inputscore : document.createElement("input"),
-  textbox : document.createElement("div"),
+class Menu {
+  constructor() {
+    this.container = document.createElement("div");
+    this.canvas = document.createElement("canvas");
+    this.form = document.createElement("form");
+    this.if_score = document.createElement("iframe");
+    
+    this.input = document.createElement("input");
+    this.inputscore = document.createElement("input");
+    this.textbox = document.createElement("div");
   
-  // arena dimensions
-  height : 400,
-  width : 400,
-  // ouput style
-  font_size : 40,
+    // arena dimensions
+    this.height = 400;
+    this.width = 400;
+    // ouput style
+    this.font_size = 40;
+  }
 
-  init : function() {
+  init() {
     //CONTAINER INIT
     this.container.style.height = this.height + "px";
     this.container.style.width = this.width + "px";
-    // document.body.insertBefore(this.container, document.body.childNodes[1]);
     document.body.appendChild(this.container);
     
     // if_score: iframe use to display highscore and info
@@ -378,22 +353,26 @@ var menu = {
     //form insertion
     this.container.appendChild(this.form);
     this.container.style.zIndex = "2";
-  },
-  show : function() {
+  }
+
+  show() {
     // wait for mysqli update and reload highscores
     this.if_score.style.visibility = "visible";
     // this.if_score.src = this.if_score.src;
     // this.if_score.src="./highscore.php";
-  },
-  hide : function() {
+  }
+
+  hide() {
     // hide menu
     this.if_score.style.visibility = "hidden";
-  },
-  clear : function() {
+  }
+  clear() {
     // this.context.fillStyle = "hsla(20, 100%, 0%, 100%)";
     this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
-  },
-  game_over : function (){
+  }
+
+  game_over() {
+    var xpos, ypos, msg;
     info("game over");
     this.context.fillStyle = "white";
     //affiche texte Game over
@@ -416,8 +395,9 @@ var menu = {
     this.input.focus();
     // press Enter to submit  
     wait_for_submit = true;
-  },
-  submit_score : function(){
+  }
+
+  submit_score() {
     // retrieve playername entry
     this.form["name"].value = this.input.value;
     // retrieve current score
@@ -433,8 +413,204 @@ var menu = {
     this.clear();
     wait_for_submit = false;
     this.show();
-  },
+  }
 }
+
+// DECLARATIONS
+var direction = ["right", "down", "left", "up"];  // direction for components
+var key = ""; // key event 
+var game_is_running = false;
+var game_is_over = false;
+var wait_for_submit = false;
+var division = 12;
+var width = 400;
+var height = width;
+var sqr_size = width / division;
+// var score = new Element(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+var score = new Score(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+var refresh_rate = 10; // delay beetween two loops
+var game_speed = 14; // game speed 
+var loop = null; // interval loop
+var head_color = "hsl(245, 12%, 92%)";
+var body_color = "hsl(225, 8%, 25%)";
+var apple_color = "hsl(0, 80%, 50%)";
+
+
+// OBJECTS
+var arena = new Arena();
+var worm = new Worm();
+var apple = new Apple();
+var menu = new Menu();
+// var menu = {
+//   container : document.createElement("div"),
+//   canvas : document.createElement("canvas"),
+//   form : document.createElement("form"),
+//   if_score : document.createElement("iframe"),
+//   // if_debug : document.createElement("iframe"),
+//   input : document.createElement("input"),
+//   inputscore : document.createElement("input"),
+//   textbox : document.createElement("div"),
+  
+//   // arena dimensions
+//   height : 400,
+//   width : 400,
+//   // ouput style
+//   font_size : 40,
+
+//   init : function() {
+//     //CONTAINER INIT
+//     this.container.style.height = this.height + "px";
+//     this.container.style.width = this.width + "px";
+//     // document.body.insertBefore(this.container, document.body.childNodes[1]);
+//     document.body.appendChild(this.container);
+    
+//     // if_score: iframe use to display highscore and info
+//     // position
+//     this.if_score.style.position = "absolute";
+//     this.if_score.style.height = this.height + "px";
+//     this.if_score.style.width = this.width + "px";
+//     // style
+//     this.if_score.border = "no";
+//     this.if_score.scrolling = "no";
+//     this.if_score.style.visibility = "hidden";
+//     // target and metadata
+//     this.if_score.src="./highscore.php";
+//     this.if_score.name = "if_score"
+//     // insertion
+//     this.container.appendChild(this.if_score);
+
+    
+//     // CANVAS INIT
+//     this.canvas.style.position = "absolute";
+//     // this.canvas.d
+//     this.canvas.width = this.width;
+//     this.canvas.height = this.height;
+//     // canvas context
+//     this.context = this.canvas.getContext("2d");
+//     this.context.font = this.font_size + "px Arial";
+//     this.context.textAlign = "center";
+//     //canvas insertion
+//     this.container.appendChild(this.canvas);
+    
+//     // TEXTBOX
+//     // position
+//     this.textbox.style.position = "absolute";
+//     this.textbox.style.width = this.width * 2/3 + "px";
+//     this.textbox.style.height = this.height * 16/18 + "px";
+//     this.textbox.style.top =  this.height * 1/18 + "px";
+//     this.textbox.style.left = ( this.canvas.width * 1/6 ) + "px";
+//     //textbox style
+//     this.textbox.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
+//     // font
+//     this.textbox.style.color = "white";
+//     this.textbox.style.fontSize = this.canvas.height / 18 + "px";
+//     this.textbox.style.textTransform = "uppercase";
+//     this.textbox.style.textAlign = "center";
+//     // visibilitythis.textbox.style.visibility = "visible";
+//     this.textbox.style.visibility = "hidden";
+
+              
+//     //input.score insertion
+//     this.container.appendChild(this.textbox);
+    
+//     // FORM INIT
+//     // input position
+//     this.input.style.width = this.canvas.width / 2 + "px";
+//     this.input.style.height = this.font_size + "px";
+//     this.input.style.position = "absolute";
+//     this.input.style.top =  this.canvas.height * 0.75 + "px";
+//     this.input.style.left = ( this.canvas.width / 4 ) + "px";
+//     // input colors
+//     this.input.style.backgroundColor = "hsla(20, 40%, 0%, 60%)";
+//     // input font style
+//     this.input.style.fontSize = this.canvas.height / 18 + "px";
+//     this.input.style.color = "white";
+//     this.input.style.textTransform = "uppercase";
+//     this.input.style.textAlign = "center";
+//     this.input.maxLength = "8";
+//     this.input.style.visibility = "hidden";
+//     //input attribut
+//     this.input.setAttribute("type", "text");
+//     this.input.setAttribute("autocomplete", "off");
+//     this.input.name = "name";
+//     // input insertion
+//     this.form.appendChild(this.input);
+
+//     // inputscore attribut
+//     this.inputscore.setAttribute("type", "number");
+//     this.inputscore.setAttribute("autocomplete", "off");
+//     this.inputscore.style.visibility = "hidden";
+//     this.inputscore.name = "score";
+//     this.form.appendChild(this.inputscore);
+
+//     //form attribut
+//     // this.form.action = "submit_score.php";
+//     this.form.action = "highscore.php";
+//     this.form.onsubmit = on_submit()
+//     this.form.method = "post";
+//     // this.form.target = "if_debug";
+//     this.form.target = "if_score";
+    
+//     //form insertion
+//     this.container.appendChild(this.form);
+//     this.container.style.zIndex = "2";
+//   },
+//   show : function() {
+//     // wait for mysqli update and reload highscores
+//     this.if_score.style.visibility = "visible";
+//     // this.if_score.src = this.if_score.src;
+//     // this.if_score.src="./highscore.php";
+//   },
+//   hide : function() {
+//     // hide menu
+//     this.if_score.style.visibility = "hidden";
+//   },
+//   clear : function() {
+//     // this.context.fillStyle = "hsla(20, 100%, 0%, 100%)";
+//     this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
+//   },
+//   game_over : function (){
+//     info("game over");
+//     this.context.fillStyle = "white";
+//     //affiche texte Game over
+//     xpos = this.canvas.width * 1/2;
+//     ypos = this.canvas.height * 1/3;
+//     msg = "Game over";
+//     this.context.fillText(msg, xpos, ypos);
+//     // disply score
+//     ypos += this.font_size * 2;
+//     msg = "score " + score.value;
+//     this.context.fillText(msg, xpos, ypos);
+//     // display frames       
+//     // ypos += this.font_size;
+//     // msg = "frames " + arena.frame;
+//     // this.context.fillText(msg, xpos, ypos);
+//     // this.canvas.style.visibility = "visible";
+          
+//     // ask for player name
+//     this.input.style.visibility = "visible";
+//     this.input.focus();
+//     // press Enter to submit  
+//     wait_for_submit = true;
+//   },
+//   submit_score : function(){
+//     // retrieve playername entry
+//     this.form["name"].value = this.input.value;
+//     // retrieve current score
+//     this.inputscore.value = score.value;
+//     // send score
+//     this.form.submit();
+
+//     // reset input
+//     this.input.style.visibility = "hidden";
+//     this.input.blur();
+//     this.input.value = null;
+//     //
+//     this.clear();
+//     wait_for_submit = false;
+//     this.show();
+//   },
+// }
 
 
 // FUNCTIONS
@@ -444,7 +620,7 @@ function init()
   parent.document.addEventListener("keydown", keyManager);
   document.addEventListener("keydown", keyManager);
   // game init
-  arena.init();
+  // arena.init();
   arena.draw();
   menu.init();
   menu.show();
@@ -499,7 +675,7 @@ function game_start() {
   arena.frame = 0;
 
   worm.init();
-  // arena.start();
+  arena.start();
   apple.new();
   loop = setInterval(game_loop, refresh_rate);
 
