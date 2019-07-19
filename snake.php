@@ -297,7 +297,7 @@
 				}
 				// this.body = new component(x, y, 40,"red", "draw");
 				// generate apple
-				this.body = new component(x, y, this.len,"orange", "draw");
+				this.body = new component(x, y, this.len,"red", "draw");
 				document.getElementById("data6").innerHTML = "new pomme : " + x + " ," + y;
 				this.size++;
 			}
@@ -305,11 +305,12 @@
 		
 		var worm = {
 			len : width / division,
+			color : "hsl(225, 35%, 85%",
 			start : function() {
 				this.direction = 0;
 				this.grow = 0;
 				//this.body = null;
-				this.body = [new component( 4, 4, this.len, "yellow", "draw")];
+				this.body = [new component( 4, 4, this.len, color, "draw")];
 			},
 			draw : function() {
 				for (var i=0; i < this.body.length; i++) {
