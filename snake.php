@@ -310,7 +310,7 @@
 				this.direction = 0;
 				this.grow = 0;
 				//this.body = null;
-				this.body = [new component( 4, 4, this.len, color, "draw")];
+				this.body = [new component( 4, 4, this.len, this.color, "draw")];
 			},
 			draw : function() {
 				for (var i=0; i < this.body.length; i++) {
