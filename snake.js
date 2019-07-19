@@ -45,6 +45,137 @@ class Score {
   }
 }
 
+class Apple extends Element {
+  constructor() {
+    // power: how many Elements will the apple add to the worm
+    // this.color = apple_color;
+    super(0, 0, sqr_size, apple_color);
+    this.generate_coords();
+    this.power = 0;
+  }
+  generate_coords() {
+    // generate a new apple position
+    var x = 0;
+    var y = 0;
+    var test = false;
+    
+    // loop until free coordinates are found
+    while (!test) {
+      test = true;
+      // generate rnd coordinates
+      x = rnd(0, division - 1);
+      y = rnd(0, division - 1);
+     
+      // check square is free
+    //   var i;
+    //   for (i=0; i<worm.body.length; i++) {
+    //     if (x != worm.body[i].x) { continue; }
+    //     if (y != worm.body[i].y) { continue; }
+    //     // go for another try
+    //     test = false;
+    //   }
+    }
+    // save new position
+    this.x = x;
+    this.y = y;
+  }
+
+  new() {
+    this.generate_coords();
+    // generate apple
+    this.power++;
+    // this.draw();
+    // this.body = new Element(x, y, sqr_size, apple_color, "draw");
+    // document.getElementById("data6").innerHTML = "new apple : " + x + " ," + y;
+    // this.size++;
+  }
+}
+
+// class Worm {
+//   constructor() {
+//     this.direction = 0;
+//     this.grow = 0;
+
+//   }
+//   start() {
+//     this.direction = 0;
+//     this.grow = 0;
+//     //this.body = null;
+//     this.body = [new Element( 4, 4, sqr_size, head_color, "draw")];
+//   }
+//   draw() {
+//     for (var i=0; i < this.body.length; i++) {
+//       this.body[i].draw();
+//     }
+//   }
+//   died() {
+//     this.body.shift();
+//     this.body[0].color = head_color;
+//     this.draw();
+//   }
+//   test_key() {
+//     //teste global.key et change .direction
+//     switch (key) {
+//     // if (key == "ArrowRight") {
+//       case "ArrowRight":
+//         this.direction++;
+//         if (this.direction > 3) this.direction = 0;
+//         break;
+//       case "ArrowLeft": 
+//         this.direction--;
+//         if (this.direction < 0) this.direction = 3;
+//         break;
+//     }
+//     key = null;
+//   }
+//   move() {
+//     //mofifie direction
+//     this.test_key();
+//     //cree et insere copie de la tete
+//     var x = worm.body[0].x;
+//     var y = worm.body[0].y;
+//     this.body.splice(1, 0, new Element(x, y, sqr_size, body_color, "draw"));
+//     //deplace tete
+//     this.body[0].move(direction[this.direction]);
+
+//     // end game if collide
+//     if (this.testCollision()) {
+//       game_is_running = false;
+//       this.died();
+//       return;
+//     }
+
+//     if (this.grow == 0) {
+//       // worm is not growing
+//       this.body.pop();
+//     } else {
+//       // WORM IS GROWING
+//       score.value += 1;
+//       this.grow--;
+//     }
+//   }
+//   testCollision(){
+//     // board edges collision
+//     if (worm.body[0].x < 0 || worm.body[0].x > division -1 || worm.body[0].y < 0 || worm.body[0].y > division -1 ) {
+//       return true;
+//     }
+//     // worm auto-collision
+//     for (var i = 1; i < worm.body.length; i++) {
+//       if (worm.body[0].x == worm.body[i].x && worm.body[0].y == worm.body[i].y) {
+//         return true;
+//       }
+//     }
+//     // worm is eating apple
+//     if (worm.body[0].x == apple.body.x && worm.body[0].y == apple.body.y) {
+//       // worms is getting bigger
+//       this.grow += apple.power;
+//       apple.new();
+//     }
+//     return false;
+//   }
+// }
+
+
 
 // DECLARATIONS
 var direction = ["right", "down", "left", "up"];  // direction for components
@@ -131,36 +262,7 @@ var arena = {
   }
 }
 
-var apple = {
-  // power: how many Elements will the apple add to the worm
-  power : 0,
-  new : function() {
-    // generate a new apple
-    var test = false;
-    while (!test) {
-      // generate rnd coordinates
-      var x = rnd(0, division - 1);
-      var y = rnd(0, division - 1);
-     
-      test = true;
-      // test case is available
-      for (var i = 0; i < worm.body.length; i++) {
-        if (x != worm.body[i].x) { continue; }
-        if (y != worm.body[i].y) { continue; }
-        test = false;
-      }
-    }
-    // generate apple
-    this.body = new Element(x, y, sqr_size, apple_color, "draw");
-    document.getElementById("data6").innerHTML = "new apple : " + x + " ," + y;
-    // this.size++;
-    this.power++;
-  },
-  draw : function() {
-    this.body.draw();
-  }
-}
-
+// var worm = new Worm();
 var worm = {
   start : function() {
     this.direction = 0;
@@ -231,7 +333,8 @@ var worm = {
       }
     }
     // worm is eating apple
-    if (worm.body[0].x == apple.body.x && worm.body[0].y == apple.body.y) {
+    // if (worm.body[0].x == apple.body.x && worm.body[0].y == apple.body.y) {
+    if (worm.body[0].x == apple.x && worm.body[0].y == apple.y) {
       // worms is getting bigger
       this.grow += apple.power;
       apple.new();
@@ -411,6 +514,7 @@ var menu = {
   },
 }
 
+var apple = new Apple();
 
 // FUNCTIONS
 function init()
