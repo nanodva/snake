@@ -305,12 +305,13 @@
 		
 		var worm = {
 			len : width / division,
-			color : "hsl(225, 35%, 85%",
+			head_color : "hsl(225, 15%, 70%)",
+			body_color : "hsl(225, 35%, 60%)",
 			start : function() {
 				this.direction = 0;
 				this.grow = 0;
 				//this.body = null;
-				this.body = [new component( 4, 4, this.len, this.color, "draw")];
+				this.body = [new component( 4, 4, this.len, this.head_color, "draw")];
 			},
 			draw : function() {
 				for (var i=0; i < this.body.length; i++) {
@@ -338,7 +339,7 @@
 				//cree et insere copie de la tete
 				var x = worm.body[0].x;
 				var y = worm.body[0].y;
-				this.body.splice(1, 0, new component(x, y, this.len, "green", "draw"));
+				this.body.splice(1, 0, new component(x, y, this.len, this.body_color, "draw"));
 				//deplace tete
 				this.body[0].move(direction[this.direction]);
 				//si collision retour
