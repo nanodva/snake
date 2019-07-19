@@ -1,3 +1,43 @@
+// CLASSES
+class element {
+  constructor(x, y, size, color, type) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.type = type; 
+    this.value = 0;   // ??
+    this.size = size; // square side lenght
+  }
+  draw() {
+    if (this.type == "draw") {
+      // rect color
+      arena.context.fillStyle = this.color;
+      var xo = this.x * this.size;
+      var yo = this.y * this.size;
+      arena.context.fillRect(xo, yo, this.size, this.size);
+    }
+    if (this.type == "text") {
+      arena.context.fillStyle = this.color;
+      arena.context.font = this.size + "px Arial";
+      arena.context.fillText(this.value, 50, 50);
+    }
+  }
+  move(direction) {
+    if (direction == "right") {
+      this.x++;
+    }
+    if (direction == "left") {
+      this.x--;
+    }
+    if (direction == "up") {
+      this.y--;
+    }
+    if (direction == "down") {
+      this.y++;
+    }
+  }
+} 
+
 // DECLARATIONS
 var direction = ["right", "down", "left", "up"];  // direction for components
 var key = ""; // key event 
@@ -8,13 +48,14 @@ var division = 12;
 var width = 400;
 var height = width;
 var sqr_size = width / division;
-var score = new component(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
+var score = new element(20, 20, 40, "hsla(0, 100%, 100%, 0.5)", "text" );
 var refresh_rate = 10; // delay beetween two loops
 var game_speed = 10; // game speed 
 var loop = null; // interval loop
 var head_color = "hsl(245, 12%, 92%)";
 var body_color = "hsl(225, 8%, 25%)";
 var apple_color = "hsl(0, 80%, 50%)";
+
 
 // OBJECTS
 var arena = {
@@ -101,7 +142,7 @@ var apple = {
       }
     }
     // generate apple
-    this.body = new component(x, y, sqr_size, apple_color, "draw");
+    this.body = new element(x, y, sqr_size, apple_color, "draw");
     document.getElementById("data6").innerHTML = "new apple : " + x + " ," + y;
     // this.size++;
     this.power++;
@@ -116,7 +157,7 @@ var worm = {
     this.direction = 0;
     this.grow = 0;
     //this.body = null;
-    this.body = [new component( 4, 4, sqr_size, head_color, "draw")];
+    this.body = [new element( 4, 4, sqr_size, head_color, "draw")];
   },
   draw : function() {
     for (var i=0; i < this.body.length; i++) {
@@ -149,7 +190,7 @@ var worm = {
     //cree et insere copie de la tete
     var x = worm.body[0].x;
     var y = worm.body[0].y;
-    this.body.splice(1, 0, new component(x, y, sqr_size, body_color, "draw"));
+    this.body.splice(1, 0, new element(x, y, sqr_size, body_color, "draw"));
     //deplace tete
     this.body[0].move(direction[this.direction]);
 
@@ -464,43 +505,6 @@ function rnd(mini, maxi) {
   var num = Math.trunc(Math.random() * (maxi-mini) + mini);
   return num;
 }
-
-function component(x, y, size, color, type) {
-  this.x = x;
-  this.y = y;
-  this.color = color;
-  this.type = type;
-  this.value = 0;
-  this.size = size;
-  // square side lenght
-  // this.len = width / division;
-  this.draw = function() {
-    if (this.type == "draw") {
-      arena.context.fillStyle = this.color;
-      // arena.context.fillRect(this.x * 40, this.y *40, size, size);
-      arena.context.fillRect(this.x * size, this.y * size, size, size);
-    }
-    if (this.type == "text") {
-      arena.context.font = this.size + "px Arial";
-      arena.context.fillStyle = this.color;
-      arena.context.fillText(this.value, 50, 50);
-    }
-  }
-  this.move = function(direction) {
-    if (direction == "right") {
-      this.x++;
-    }
-    if (direction == "left") {
-      this.x--;
-    }
-    if (direction == "up") {
-      this.y--;
-    }
-    if (direction == "down") {
-      this.y++;
-    }
-  }
-} 
 
 function on_submit() {
   // this is called when score form is submitted
