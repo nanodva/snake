@@ -94,7 +94,8 @@ class Worm {
     // this.lenght = 0;
   }
 
-  new() {
+  init() {
+    this.body = [];
     this.direction = 0;
     this.grow = 0;
     // create head
@@ -497,7 +498,7 @@ function game_start() {
   apple.power = 0;
   arena.frame = 0;
 
-  worm.new();
+  worm.init();
   // arena.start();
   apple.new();
   loop = setInterval(game_loop, refresh_rate);
@@ -508,6 +509,7 @@ function game_start() {
 function game_over() {
   // when player lose
   clearInterval(loop);
+  // worm = null;
   // apple.body.draw();
   // stop game
   menu.game_over();
