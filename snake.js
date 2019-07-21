@@ -15,16 +15,18 @@ class Element {
     arena.context.fillRect(xo, yo, this.size, this.size);
   }
   move(direction) {
-    if (direction == "right") {
+    // if (direction == "right") {
+    if (direction == DIR.RIGHT) {
       this.x++;
     }
-    if (direction == "left") {
+    // if (direction == "left") {
+    if (direction == DIR.LEFT) {
       this.x--;
     }
-    if (direction == "up") {
+    if (direction == DIR.UP) {
       this.y--;
     }
-    if (direction == "down") {
+    if (direction == DIR.DOWN) {
       this.y++;
     }
   }
@@ -89,17 +91,19 @@ class Apple extends Element {
 class Worm {
   constructor() {
     this.body = [];
-    this.direction = 0;
+    this.direction = DIR.RIGHT;
     this.grow = 0;
     // this.lenght = 0;
   }
 
   init() {
-    this.body = [];
-    this.direction = 0;
+    this.direction = DIR.RIGHT;
+    // this.direction = Dir.right;
     this.grow = 0;
-    // create head
-    this.body.splice(1,0,new Element( 4, 4, sqr_size, head_color));
+    // create head at top left corner
+    var xpos = 0
+    var ypos = 0
+    this.body = [new Element( xpos, ypos, sqr_size, head_color)];
     // this.lenght += 1;
   }
   draw() {
@@ -108,33 +112,42 @@ class Worm {
     }
   }
   died() {
+    game_is_running = false;
     this.body.shift();
     this.body[0].color = head_color;
     this.draw();
   }
   turn_left() {
     //teste global.key et change .direction
-    this.direction--;
-    if (this.direction < 0) this.direction = 3;
+    if (this.direction == DIR.DOWN) {
+      this.direction = DIR.RIGHT;
+    } else {
+      this.direction++;
+    }
+    // this.direction--;
+    // if (this.direction < 0) this.direction = 3;
   }
-
   turn_right() {
     // if (key == "ArrowRight") {
-      this.direction++;
-      if (this.direction > 3) this.direction = 0;
+      if (this.direction == DIR.RIGHT) {
+        this.direction = DIR.DOWN;
+      } else {
+        this.direction--;
+      }
+      // this.direction++;
+      // if (this.direction > 3) this.direction = 0;
   }
-
-   move() {
+  move() {
     //cree et insere copie de la tete
     var x = this.body[0].x;
     var y = this.body[0].y;
     this.body.splice(1, 0, new Element(x, y, sqr_size, body_color));
     //deplace tete
-    this.body[0].move(direction[this.direction]);
-
+    // this.body[0].move(direction[this.direction]);
+    this.body[0].move(this.direction);
+    
     // end game if collide
     if (this.testCollision()) {
-      game_is_running = false;
       this.died();
       return;
     }
@@ -149,7 +162,6 @@ class Worm {
       this.grow--;
     }
   }
-  
   testCollision(){
     // board edges collision
     if (this.body[0].x < 0 || this.body[0].x > division -1 || this.body[0].y < 0 || this.body[0].y > division -1 ) {
@@ -168,6 +180,11 @@ class Worm {
       apple.new();
     }
     return false;
+  }
+  test_collide() {
+    var data = arena.frame;
+    var data = DIR.RIGHT;
+    info(data);
   }
 }
 
@@ -242,8 +259,8 @@ class Menu {
     this.form = document.createElement("form");
     this.if_score = document.createElement("iframe");
     
-    this.input = document.createElement("input");
-    this.inputscore = document.createElement("input");
+    this.in_name = document.createElement("input");
+    this.in_score = document.createElement("input");
     this.textbox = document.createElement("div");
   
     // arena dimensions
@@ -310,33 +327,33 @@ class Menu {
     
     // FORM INIT
     // input position
-    this.input.style.width = this.canvas.width / 2 + "px";
-    this.input.style.height = this.font_size + "px";
-    this.input.style.position = "absolute";
-    this.input.style.top =  this.canvas.height * 0.75 + "px";
-    this.input.style.left = ( this.canvas.width / 4 ) + "px";
+    this.in_name.style.width = this.canvas.width / 2 + "px";
+    this.in_name.style.height = this.font_size + "px";
+    this.in_name.style.position = "absolute";
+    this.in_name.style.top =  this.canvas.height * 0.75 + "px";
+    this.in_name.style.left = ( this.canvas.width / 4 ) + "px";
     // input colors
-    this.input.style.backgroundColor = "hsla(20, 40%, 0%, 60%)";
+    this.in_name.style.backgroundColor = "hsla(20, 40%, 0%, 60%)";
     // input font style
-    this.input.style.fontSize = this.canvas.height / 18 + "px";
-    this.input.style.color = "white";
-    this.input.style.textTransform = "uppercase";
-    this.input.style.textAlign = "center";
-    this.input.maxLength = "8";
-    this.input.style.visibility = "hidden";
+    this.in_name.style.fontSize = this.canvas.height / 18 + "px";
+    this.in_name.style.color = "white";
+    // this.in_name.style.textTransform = "uppercase";
+    this.in_name.style.textAlign = "center";
+    this.in_name.maxLength = "8";
+    this.in_name.style.visibility = "hidden";
     //input attribut
-    this.input.setAttribute("type", "text");
-    this.input.setAttribute("autocomplete", "off");
-    this.input.name = "name";
+    this.in_name.setAttribute("type", "text");
+    this.in_name.setAttribute("autocomplete", "off");
+    this.in_name.name = "name";
     // input insertion
-    this.form.appendChild(this.input);
+    this.form.appendChild(this.in_name);
 
-    // inputscore attribut
-    this.inputscore.setAttribute("type", "number");
-    this.inputscore.setAttribute("autocomplete", "off");
-    this.inputscore.style.visibility = "hidden";
-    this.inputscore.name = "score";
-    this.form.appendChild(this.inputscore);
+    // in_score attribut
+    this.in_score.setAttribute("type", "number");
+    this.in_score.setAttribute("autocomplete", "off");
+    this.in_score.style.visibility = "hidden";
+    this.in_score.name = "score";
+    this.form.appendChild(this.in_score);
 
     //form attribut
     // this.form.action = "submit_score.php";
@@ -387,24 +404,24 @@ class Menu {
     // this.canvas.style.visibility = "visible";
           
     // ask for player name
-    this.input.style.visibility = "visible";
-    this.input.focus();
+    this.in_name.style.visibility = "visible";
+    this.in_name.focus();
     // press Enter to submit  
     wait_for_submit = true;
   }
 
   submit_score() {
     // retrieve playername entry
-    this.form["name"].value = this.input.value;
+    this.form["name"].value = this.in_name.value;
     // retrieve current score
-    this.inputscore.value = score.value;
+    this.in_score.value = score.value;
     // send score
     this.form.submit();
 
     // reset input
-    this.input.style.visibility = "hidden";
-    this.input.blur();
-    this.input.value = null;
+    this.in_name.style.visibility = "hidden";
+    this.in_name.blur();
+    this.in_name.value = null;
     //
     this.clear();
     wait_for_submit = false;
@@ -415,7 +432,7 @@ class Menu {
 
 // DECLARATIONS
 var direction = ["right", "down", "left", "up"];  // direction for components
-var Directions = Object.freeze({"RIGHT":1, "UP":2, "LEFT": 3, "DOWN": 4});
+var DIR = Object.freeze({"RIGHT":0, "UP":1, "LEFT": 2, "DOWN": 3});
 var game_is_running = false;
 var game_is_over = false;
 var wait_for_submit = false;
@@ -516,10 +533,25 @@ function game_start() {
 function game_over() {
   // when player lose
   clearInterval(loop);
-  // worm = null;
-  // apple.body.draw();
-  // stop game
   menu.game_over();
+}
+
+
+// use to pop apples randomly
+function rnd(mini, maxi) {
+  var num = Math.trunc(Math.random() * (maxi-mini) + mini);
+  return num;
+}
+
+function on_submit() {
+  // this is called when score form is submitted
+  //
+}
+
+
+function info(data) {
+  //
+  document.getElementById("info").innerHTML = data;
 }
 
 function game_loop() {
@@ -534,36 +566,18 @@ function game_loop() {
 
     //COMPTEUR FRAME//
     arena.frame++;
-    if ((arena.frame / game_speed) % 1 == 0) {
+    if ((arena.frame / game_speed) % 2 == 0) {
       worm.move();
+    }
+    else if ((arena.frame / game_speed) % 1 == 0) {
+      worm.move();
+      worm.test_collide();
     }
   }
   else {
     game_over();
   }
 }
-
-// use to pop apples randomly
-function rnd(mini, maxi) {
-  var num = Math.trunc(Math.random() * (maxi-mini) + mini);
-  return num;
-}
-
-function on_submit() {
-  // this is called when score form is submitted
-  //
-}
-
-function resizeIframe(obj) {
-  // cut frme according to source dimensions
-  obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-}
-
-function info(data) {
-  //
-  document.getElementById("info").innerHTML = data;
-}
-
 function fluxdata() {
     document.getElementById('data1').innerHTML = worm.body.length;
     document.getElementById('data2').innerHTML = worm.direction;
