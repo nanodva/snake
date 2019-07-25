@@ -7,6 +7,13 @@ class Game {
   get status() {
     return this._status;
   }
+  get is_running() {
+    if (this._status == "running") {
+      return true;
+    } else {
+      return false;
+    }
+  }
   start(speed) {
     // game speed 
     this.speed = speed;
@@ -19,6 +26,7 @@ class Game {
   }
   stop() {
     clearInterval(this.loop);
+    this._status = "stopped";
   }
   mainloop() {
     // ! this is an external call
@@ -27,15 +35,15 @@ class Game {
 
     game.framecount++;
     update_debug_data();
-    // if ((arena.frame % game_speed) == 0) {
     if ((game.framecount % game.speed) == 0) {
-      arena.draw(); 
       worm.move();
-      apple.draw();
-      worm.draw();
-      score.draw();
       worm.test_collision();
+
     }
+    arena.draw(); 
+    apple.draw();
+    worm.draw();
+    score.draw();
   }
 }
 

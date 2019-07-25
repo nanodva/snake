@@ -36,8 +36,8 @@ var apple;
 // FUNCTIONS
 function f_init_all() {
   // start listening to keyboard
-  parent.document.addEventListener("keydown", keyManager);
-  document.addEventListener("keydown", keyManager);
+  parent.document.addEventListener("keydown", key_event_listener);
+  document.addEventListener("keydown", key_event_listener);
   // game init
   arena.draw();
   menu.show();
@@ -70,13 +70,12 @@ function rnd(mini, maxi) {
   return num;
 }
 
-
-
-function keyManager(event) {
+function key_event_listener(event) {
   document.getElementById("game_key").innerHTML = event.key;
 
   // ingame key events
-  if (game_is_running) {
+  // if (game_is_running) {
+  if (game.is_running) {
     switch (event.key) {
       case "ArrowRight":
         worm.turn_right();
