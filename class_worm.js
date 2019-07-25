@@ -2,14 +2,14 @@
 class Worm {
   constructor() {
     this.body = [];
-    this.direction = DIR.RIGHT;
-    this.growth = 0;
+    // this.direction = DIR.RIGHT;
+    // this.growth = 0;
     // this.lenght = 0;
-    var xpos = 0
-    var ypos = 0
-    this.body = [new Element( xpos, ypos, sqr_size, head_color)];
+    // var xpos = 0
+    // var ypos = 0
+    // this.body = [new Element( xpos, ypos, sqr_size, head_color)];
   }
-  init() {
+  reset() {
     this.direction = DIR.RIGHT;
     this.growth = 0;
     // create head at top left corner
@@ -27,7 +27,6 @@ class Worm {
   }
   died() {
     // alert("worms died");
-    game_is_running = false;
     this.body.shift();
     // this.body[0].color = head_color;
     this.draw();
@@ -72,7 +71,10 @@ class Worm {
 
     var i = 0;
     for (i=0; i<len; i++) {
-      this.body[i].move() || this.died();
+      // this.body[i].move() || this.died();
+      if (! this.body[i].move()) {
+        return false;
+      }
     }
 
     if (len>0) {
@@ -90,6 +92,7 @@ class Worm {
       score.value += 1;
       this.growth--;
     }
+    return true;
   }
 
   test_collision(){

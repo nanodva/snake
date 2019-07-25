@@ -107,25 +107,30 @@ class Arena {
       ctx.fillText(i, x, y);
     }
   }
-  refresh() {
-    this.draw(); 
-    worm.draw(); 
-    apple.draw();
-    score.draw();
+  // refresh() {
+  //   this.draw(); 
+  //   worm.draw(); 
+  //   apple.draw();
+  //   score.draw();
 
-  }
+  // }
  
   is_square_free(col, row) {
     // square number
-    var square = col + (this.cols * row);
+    var num = col + (this.cols * row);
+    var square = this.board[num];
 
-    if (this.board[square].isfree == true) {
+    if (square.isfree == true) {
       return true;
     } else {
-      return false;
+      if (square.object == "apple") {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
-  book(col, row) {
+  book(col, row, name) {
     if (col < 0 || col > this.cols - 1) {
       alert ("out of board: col");
       return false;
@@ -145,7 +150,7 @@ class Arena {
 
     // alert('book num: ' + num + "(" + col + "," + row + ")");
     this.board[num].isfree = false;
-    // this.board[num].object = name;
+    this.board[num].object = name;
     return true;
   }
   free(col, row) {

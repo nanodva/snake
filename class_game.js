@@ -27,6 +27,7 @@ class Game {
   stop() {
     clearInterval(this.loop);
     this._status = "stopped";
+    game_over
   }
   mainloop() {
     // ! this is an external call
@@ -36,9 +37,16 @@ class Game {
     game.framecount++;
     update_debug_data();
     if ((game.framecount % game.speed) == 0) {
-      worm.move();
-      worm.test_collision();
-
+      // move worm, end game if fails
+      if (worm.move()) {
+        worm.test_collision();
+      } else {
+        worm.died();
+        // game_is_running = false;
+        // game._status = "game over";
+        // game.stop();
+        game_over();
+      }
     }
     arena.draw(); 
     apple.draw();

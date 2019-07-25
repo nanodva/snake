@@ -49,20 +49,28 @@ class Element {
 
   // move(direction) {
   move() {
-    arena.free(this.x, this.y);
+    var dest = {
+      x: this.x,
+      y: this.y
+    }
+
     if (this.direction == DIR.RIGHT) {
-      this.x ++;
+      dest.x++;
     }
     else if (this.direction == DIR.LEFT) {
-      this.x --;
+      dest.x--;
     }
     else if (this.direction == DIR.UP) {
-      this.y --;
+      dest.y--;
     }
     else if (this.direction == DIR.DOWN) {
-      this.y ++;
+      dest.y++;
     }
-    if (arena.book(this.x, this.y)) {
+    if (arena.is_square_free(dest.x, dest.y)) {
+      arena.free(this.x, this.y);
+      this.x = dest.x;
+      this.y = dest.y;
+      arena.book(this.x, this.y)
       return true;
     } else {
       return false;

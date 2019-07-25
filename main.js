@@ -28,7 +28,7 @@ var menu = new Menu(width, height);
 var arena = new Arena(division, division, width, height);
 var score = new Score(20, 20, 40, "hsla(0, 100%, 100%, 0.5)");
 // var worm = new Worm();
-var worm;
+var worm = new Worm();
 var apple;
 
 
@@ -45,10 +45,9 @@ function f_init_all() {
 
 function game_start() {
   menu.hide();
-
   arena.reset();
+  worm.reset();
   score.reset()
-  worm = new Worm();
   apple = new Apple();
   apple.new();
   

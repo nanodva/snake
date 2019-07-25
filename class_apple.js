@@ -11,7 +11,7 @@ class Apple extends Element {
   }
   new() {
     // generate a new increased apple
-    this.generate_coords();
+    this.generate_coords("apple");
     this.power++;
   }
 }
