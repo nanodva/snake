@@ -1,6 +1,7 @@
 
 class Menu {
-  constructor() {
+  constructor(width, height) {
+    // objects
     this.container = document.createElement("div");
     this.canvas = document.createElement("canvas");
     this.form = document.createElement("form");
@@ -11,13 +12,15 @@ class Menu {
     this.textbox = document.createElement("div");
   
     // arena dimensions
-    this.height = 400;
-    this.width = 400;
+    this.height = height;
+    this.width = width;
     // ouput style
-    this.font_size = 40;
+    this.fontsize = height / 18;
+    this.font = this.fontsize + "px Arial";
+    this.init_all();
   }
 
-  init() {
+  init_all() {
     //CONTAINER INIT
     this.container.style.height = this.height + "px";
     this.container.style.width = this.width + "px";
@@ -41,13 +44,13 @@ class Menu {
     
     // CANVAS INIT
     this.canvas.style.position = "absolute";
-    // this.canvas.d
     this.canvas.width = this.width;
     this.canvas.height = this.height;
     // canvas context
     this.context = this.canvas.getContext("2d");
-    this.context.font = this.font_size + "px Arial";
-    this.context.textAlign = "center";
+    // this.context.font = this.font_size + "px Arial";
+    // this.context.font = this.font;
+    // this.context.textAlign = "center";
     //canvas insertion
     this.container.appendChild(this.canvas);
     
@@ -62,7 +65,7 @@ class Menu {
     this.textbox.style.backgroundColor = "hsla(0, 0%, 0%, 0)";
     // font
     this.textbox.style.color = "white";
-    this.textbox.style.fontSize = this.canvas.height / 18 + "px";
+    this.textbox.style.fontSize = this.fontsize + "px";
     this.textbox.style.textTransform = "uppercase";
     this.textbox.style.textAlign = "center";
     // visibilitythis.textbox.style.visibility = "visible";
@@ -73,16 +76,16 @@ class Menu {
     this.container.appendChild(this.textbox);
     
     // FORM INIT
-    // input position
-    this.in_name.style.width = this.canvas.width / 2 + "px";
-    this.in_name.style.height = this.font_size + "px";
+    // name input: ask for player name
+    this.in_name.style.width = this.canvas.width/2 + "px";
+    this.in_name.style.height = this.fontsize + "px";
     this.in_name.style.position = "absolute";
     this.in_name.style.top =  this.canvas.height * 0.75 + "px";
     this.in_name.style.left = ( this.canvas.width / 4 ) + "px";
     // input colors
-    this.in_name.style.backgroundColor = "hsla(20, 40%, 0%, 60%)";
+    this.in_name.style.backgroundColor = "hsla(20, 30%, 0%, 30%)";
     // input font style
-    this.in_name.style.fontSize = this.canvas.height / 18 + "px";
+    this.in_name.style.fontSize = this.fontsize;
     this.in_name.style.color = "white";
     // this.in_name.style.textTransform = "uppercase";
     this.in_name.style.textAlign = "center";
@@ -94,7 +97,6 @@ class Menu {
     this.in_name.name = "name";
     // input insertion
     this.form.appendChild(this.in_name);
-
     // in_score attribut
     this.in_score.setAttribute("type", "number");
     this.in_score.setAttribute("autocomplete", "off");
@@ -103,11 +105,9 @@ class Menu {
     this.form.appendChild(this.in_score);
 
     //form attribut
-    // this.form.action = "submit_score.php";
     this.form.action = "highscore.php";
-    this.form.onsubmit = on_submit()
+    // this.form.onsubmit = on_submit()
     this.form.method = "post";
-    // this.form.target = "if_debug";
     this.form.target = "if_score";
     
     //form insertion
@@ -116,39 +116,38 @@ class Menu {
   }
 
   show() {
-    // wait for mysqli update and reload highscores
+    // showh highscore table
     this.if_score.style.visibility = "visible";
-    // this.if_score.src = this.if_score.src;
-    // this.if_score.src="./highscore.php";
   }
 
   hide() {
-    // hide menu
+    // hide menu 
     this.if_score.style.visibility = "hidden";
   }
   clear() {
-    // this.context.fillStyle = "hsla(20, 100%, 0%, 100%)";
     this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
+  }
+
+  reset_context_properties() {
+    // font
+    this.context.fillStyle = "white";
+    this.context.font = this.font;
+    this.context.textAlign = "center";
   }
 
   game_over() {
     var xpos, ypos, msg;
     game_status = "game over";
-    this.context.fillStyle = "white";
+    this.reset_context_properties();
     //affiche texte Game over
     xpos = this.canvas.width * 1/2;
     ypos = this.canvas.height * 1/3;
     msg = "Game over";
     this.context.fillText(msg, xpos, ypos);
     // disply score
-    ypos += this.font_size * 2;
+    ypos += this.fontsize * 2;
     msg = "score " + score.value;
     this.context.fillText(msg, xpos, ypos);
-    // display frames       
-    // ypos += this.font_size;
-    // msg = "frames " + arena.frame;
-    // this.context.fillText(msg, xpos, ypos);
-    // this.canvas.style.visibility = "visible";
           
     // ask for player name
     this.in_name.style.visibility = "visible";

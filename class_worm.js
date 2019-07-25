@@ -5,6 +5,9 @@ class Worm {
     this.direction = DIR.RIGHT;
     this.growth = 0;
     // this.lenght = 0;
+    var xpos = 0
+    var ypos = 0
+    this.body = [new Element( xpos, ypos, sqr_size, head_color)];
   }
   init() {
     this.direction = DIR.RIGHT;

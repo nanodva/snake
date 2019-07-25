@@ -1,8 +1,6 @@
 
 class Arena {
   constructor(cols, rows, width, height) {
-    // ouput style
-    this.font_size = 40;
 
     // display size
     this.width  = width;
@@ -10,15 +8,17 @@ class Arena {
     // grid
     this.cols = cols;
     this.rows = rows;
+    this.sqrlen = width / cols;
+
 
     //CONTAINER INIT
-    this.container = document.createElement("div");
-    this.container.style.height   = this.height + "px";
-    this.container.style.width    = this.width  + "px";
-    this.container.style.position = "absolute";
-    this.container.style.zIndex   = "-1";
+    this.div = document.createElement("div");
+    this.div.style.height   = this.height + "px";
+    this.div.style.width    = this.width  + "px";
+    this.div.style.position = "absolute";
+    this.div.style.zIndex   = "-1";
     //arena is the first object ref in this page
-    document.body.insertBefore(this.container, document.body.childNodes[0]);
+    document.body.insertBefore(this.div, document.body.childNodes[0]);
 
     // CANVAS INIT
     this.canvas = document.createElement("canvas");
@@ -26,35 +26,56 @@ class Arena {
     this.canvas.height = this.height;
     this.canvas.style.backgroundColor = "black";
     //canvas insertion
-    this.container.appendChild(this.canvas);
+    this.div.appendChild(this.canvas);
 
     // CANVAS CONYTEXT
     this.context = this.canvas.getContext("2d");
-    this.context.font = this.font_size + "px Arial";
-    this.context.textAlign = "center";
-
-    // Hardware
-    // board squares occupation
-    this.board = new Array(this.cols * this.rows);
-    for (let i=0; i<this.board.length; i++) {
-      this.board[i] = {'isfree': true, 'object': null};
-    }
-    console.log(this.board);
+    this.fontsize = 1/2 * this.width / this.cols;
   }
 
+
+  reset_context_properties() {
+    // draw properties
+    this.context.strokeStyle = "hsla(0, 100%, 100%, 0.5)";
+
+    // CANVAS FONT
+    // this.fontsize = (this.width / this.cols) * 1/2;
+    this.context.font = this.fontsize + "px Arial";
+    // font properties
+    this.context.textAlign = "center";
+    this.context.fillStyle = "#777";
+  }
+
+  reset() {
+    //
+    this.frame = 0;
+    // board squares occupation
+    var size = this.cols * this.rows;
+    this.board = new Array(size);
+    
+    // memory for each board square
+    var i = 0;
+    for (i=0; i<size; i++) {
+      this.board[i] = {'isfree': true, 'object': null};
+    }
+  }
+
+
+  draw() {
+    // draw the arena background
+    this.clear();
+    this.draw_grid();
+    this.draw_numbers();
+  }
   clear() {
     // clean arena
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
-
-  draw() {
-    // draw the arena background
-    var ctx = this.context;
-
-    // clear cancas
-    ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  draw_grid() {
     // draw lines to delimit square sides
+    var ctx = this.context;
     ctx.beginPath();
+    // execute drawings
     for ( var i = 1; i<division; i++) {
       // draw verticals
       ctx.moveTo(i*sqr_size, 0);
@@ -63,9 +84,28 @@ class Arena {
       ctx.moveTo(0, i*sqr_size);
       ctx.lineTo(this.canvas.width, i*sqr_size);    
     }
-    // execute drawings
-    this.context.strokeStyle = "#700";
+
     this.context.stroke();
+  }
+  draw_numbers() {
+    // numerate columns and rows
+    this.reset_context_properties();
+    var ctx = this.context;
+    var i = 0;
+    var x,y;
+
+    var center_x = this.sqrlen/2;
+    var center_y = this.sqrlen/2 + this.fontsize/2 - 1;
+    for (i=0; i<this.cols; i++) {
+      x = (i * this.sqrlen) + center_x;
+      y = center_y;
+      ctx.fillText(i, x, y);
+    }
+    for (i=0; i<this.rows; i++) {
+      x = center_x;
+      y = i*this.sqrlen + center_y;
+      ctx.fillText(i, x, y);
+    }
   }
   refresh() {
     this.draw(); 
@@ -74,23 +114,14 @@ class Arena {
     score.draw();
 
   }
-  start() {
-    // start game
-    this.frame = 0;
-    // this.interval = setInterval(game_loop, refresh_rate);
-  }
-  stop() {
-    // stop game loop
-    clearInterval(this.interval);
-  }
+ 
   is_square_free(col, row) {
+    // square number
     var square = col + (this.cols * row);
 
-    // alert('square number: ' + square + "(" + col + "," + row + ")");
     if (this.board[square].isfree == true) {
       return true;
     } else {
-      // alert("coord: " + col + ":" + row + "\nis not free.");
       return false;
     }
   }

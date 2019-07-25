@@ -4,11 +4,16 @@ class Score {
     this.y = y;
     this.color = color;
     this.size = size;   // font size
-    this.value = 0;     // score counter
   }
   draw() {
+    // TODO add context to constructor()
     arena.context.fillStyle = this.color;
     arena.context.font = this.size + "px Arial";
     arena.context.fillText(this.value, 50, 50);
+  }
+  reset() {
+    // reset score counter
+    // this value  is send to highscore.php
+    this.value = 0;
   }
 }

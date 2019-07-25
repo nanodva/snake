@@ -9,7 +9,7 @@ body {
 	padding: 0;
 	margin: 0;
 }
-.debug_box {
+.game_data {
 	display: inline-block;
 	float: left;
 	width: 20%;
