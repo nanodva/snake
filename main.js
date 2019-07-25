@@ -40,7 +40,6 @@ function f_init_all() {
   document.addEventListener("keydown", keyManager);
   // game init
   arena.draw();
-  menu.init_all();
   menu.show();
 } 
 
@@ -61,6 +60,7 @@ function game_start() {
 function game_over() {
   // when player lose
   game.stop();
+  game_status = "game over";
   menu.game_over();
 }
 

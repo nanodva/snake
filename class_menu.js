@@ -137,7 +137,6 @@ class Menu {
 
   game_over() {
     var xpos, ypos, msg;
-    game_status = "game over";
     this.reset_context_properties();
     //affiche texte Game over
     xpos = this.canvas.width * 1/2;
