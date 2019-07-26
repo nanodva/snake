@@ -9,43 +9,14 @@ body {
 	padding: 0;
 	margin: 0;
 }
-.game_data {
-	display: inline-block;
+
+.data {
+	/*display: inline-block;*/
+	display: inline;
 	float: left;
-	width: 20%;
+	width: 300px;
 	background : grey;
 	border : 1px solid black;
 	margin-top: 50px;
 	padding : 5px;
-
-}
-.worm_data {
-	display: inline-block;
-	float: left;
-	width: 400px;
-	background : grey;
-	border : 1px solid black;
-	margin-top: 50px;
-	padding : 5px;
-
-}
-.apple_data {
-	display: inline-block;
-	/*float: left;*/
-	width: 400px;
-	background : grey;
-	border : 1px solid black;
-	margin-top: 50px;
-	padding : 5px;
-
-}
-.arena_data {
-	display: inline-block;
-	/*float: left;*/
-	width: 400px;
-	background : grey;
-	border : 1px solid black;
-	margin-top: 50px;
-	padding : 5px;
-
 }

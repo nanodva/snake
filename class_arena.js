@@ -31,28 +31,31 @@ class Arena {
     // CANVAS CONYTEXT
     this.context = this.canvas.getContext("2d");
     this.fontsize = 1/2 * this.width / this.cols;
+    
+    // board squares occupation
+    var size = this.cols * this.rows;
+    this.board = new Array(size);
+    // memory for each board square
+    this.reset();
+    // var i = 0;
+    // for (i=0; i<size; i++) {
+      // this.board[i] = {'isfree': true, 'object': null};
+    // }
   }
 
 
   reset_context_properties() {
     // draw properties
     this.context.strokeStyle = "hsla(0, 100%, 100%, 0.5)";
-
-    // CANVAS FONT
-    // this.fontsize = (this.width / this.cols) * 1/2;
-    this.context.font = this.fontsize + "px Arial";
     // font properties
+    this.context.font = this.fontsize + "px Arial";
     this.context.textAlign = "center";
     this.context.fillStyle = "#777";
   }
 
   reset() {
-    //
-    this.frame = 0;
-    // board squares occupation
-    var size = this.cols * this.rows;
-    this.board = new Array(size);
-    
+    // clean board
+    var size = this.board.length;
     // memory for each board square
     var i = 0;
     for (i=0; i<size; i++) {
@@ -60,10 +63,10 @@ class Arena {
     }
   }
 
-
   draw() {
     // draw the arena background
     this.clear();
+    this.reset_context_properties();
     this.draw_grid();
     this.draw_numbers();
   }
@@ -89,7 +92,6 @@ class Arena {
   }
   draw_numbers() {
     // numerate columns and rows
-    this.reset_context_properties();
     var ctx = this.context;
     var i = 0;
     var x,y;
@@ -107,30 +109,27 @@ class Arena {
       ctx.fillText(i, x, y);
     }
   }
-  // refresh() {
-  //   this.draw(); 
-  //   worm.draw(); 
-  //   apple.draw();
-  //   score.draw();
-
-  // }
  
   is_square_free(col, row) {
     // square number
     var num = col + (this.cols * row);
     var square = this.board[num];
 
-    if (square.isfree == true) {
+    // test square is not out of the board
+    if (col < 0 || col > this.cols) return false;
+    if (row < 0 || row > this.rows) return false;
+
+    // test square is unused
+    // if (square.isfree == true) {
+    if (square.isfree == true || square.object == "apple") {
       return true;
     } else {
-      if (square.object == "apple") {
-        return true;
-      } else {
-        return false;
-      }
+      return false;
     }
   }
+ 
   book(col, row, name) {
+    // reserve a square
     if (col < 0 || col > this.cols - 1) {
       alert ("out of board: col");
       return false;
@@ -144,22 +143,19 @@ class Arena {
     if (num < 0 || num > this.board.length ) {
       return false;
     }
-
     // var square = this.board[num];
     // if (square.isfree == false ) return false;
 
-    // alert('book num: ' + num + "(" + col + "," + row + ")");
     this.board[num].isfree = false;
     this.board[num].object = name;
     return true;
   }
+ 
   free(col, row) {
+    // free a square
     var num = col + (this.cols * row);
-    // var num = 10;
-    // alert('free num: ' + num + "(" + col + "," + row + ")");
     if (num < 0 || num > this.board.length ) return false;
     this.board[num].isfree = true;
     this.board[num].object = null;
   }
-
 }

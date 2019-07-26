@@ -1,22 +1,18 @@
 
 class Worm {
   constructor() {
-    this.body = [];
-    // this.direction = DIR.RIGHT;
-    // this.growth = 0;
-    // this.lenght = 0;
-    // var xpos = 0
-    // var ypos = 0
-    // this.body = [new Element( xpos, ypos, sqr_size, head_color)];
+    this.body = new Array();
   }
   reset() {
-    this.direction = DIR.RIGHT;
+    // this.direction = DIR.RIGHT;
     this.growth = 0;
     // create head at top left corner
     var xpos = 0
     var ypos = 0
-    this.body = [new Element( xpos, ypos, sqr_size, head_color)];
-    // this.head = this.body[0];
+    this.body = [new Element( xpos, ypos, sqr_size, head_color, "head")];
+    this.head = this.body[0];
+    this.head.direction = DIR.RIGHT;
+    this.fifo = [];
   }
   draw() {
     var len = this.body.length ;
@@ -27,68 +23,95 @@ class Worm {
   }
   died() {
     // alert("worms died");
-    this.body.shift();
+    this.head.color = "orange";
+    // this.body.shift();
     // this.body[0].color = head_color;
-    this.draw();
+    // this.draw();
   }
-  turn_left() {
-    if (this.direction == DIR.DOWN) {
-      this.direction = DIR.RIGHT;
+  // turn_left() {
+  //   if (this.head.direction == DIR.DOWN) {
+  //     this.head.direction = DIR.RIGHT;
+  //   } else {
+  //     this.head.direction++;
+  //   }
+  // }
+  // turn_right() {
+  //   if (this.head.direction == DIR.RIGHT) {
+  //     this.head.direction = DIR.DOWN;
+  //   } else {
+  //     this.head.direction--;
+  //   }
+  // }
+
+  push(side) {
+    // push next direction change in fifo
+    this.fifo.push(side);
+    console.table(this.fifo);
+  }
+  
+  pop() {
+    // retrieve oldest direction command
+    console.debug("popping...");
+    if (this.fifo.length > 0) {
+      return this.fifo.shift();
     } else {
-      this.direction++;
+      return false;
     }
   }
-  turn_right() {
-      if (this.direction == DIR.RIGHT) {
-        this.direction = DIR.DOWN;
-      } else {
-        this.direction--;
-      }
+
+  turn(side) {
+    // compute new direction through modulus 4
+    var add = 0;
+    switch (side) {
+      case "left":
+        add = 1;
+        break;
+      case "right":
+        add = 3;
+        break;
+    }
+    var olddir = this.head.direction;
+    var newdir = (olddir + add) % 4;
+    this.head.direction = newdir;
   }
   move() {
     var len = this.body.length;
+
     // copy tail properties if worm growth
     var tail = this.body[len-1];
     var tail_x = tail.x;
     var tail_y = tail.y;
     var tail_dir = tail.direction;
 
+    // change head direction if requested
+    var side;
+    if (side=this.pop()) {
+      console.debug("pop side: ", side);
+      this.turn(side);
+    }
 
-    var head = this.body[0];
-    this.body[0].set_direction(this.direction);
-    // move worm head
-    // this.body[0].move() || this.died();
-    // head.move() || this.died();
-    // moving body, forwardding direction to next element
-    // if (len > 1) {
-    var trans_dir;
-    var next_dir;
-    var ring;
-
-    var x;
-    var y;
-    var dir;
-
+    // move all body parts
     var i = 0;
     for (i=0; i<len; i++) {
       // this.body[i].move() || this.died();
       if (! this.body[i].move()) {
+        console.log("move false");
         return false;
       }
     }
 
+    // moving body, forwardding direction to next element
     if (len>0) {
       for (i=len-1; i>0; i--) {
         this.body[i].set_direction(this.body[i-1].direction);
       }
     }
 
+    // snake grows from the tail end by one element
     if (this.growth > 0) {
-      // this.body.splice(1, 0, new Element(x, y, sqr_size, body_color)) ;
-      // alert("new ring: pos: " + x + ',' + y + 'dir: ' + dir);
-      var new_ring = new Element(tail_x, tail_y, sqr_size, body_color);
-      new_ring.set_direction(tail_dir);
-      this.body.push(new_ring);
+      var newtail = new Element(tail_x, tail_y, sqr_size, body_color, "tail");
+      newtail.set_direction(tail_dir);
+      this.body.push(newtail);
       score.value += 1;
       this.growth--;
     }

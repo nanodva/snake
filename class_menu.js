@@ -152,7 +152,7 @@ class Menu {
     this.in_name.style.visibility = "visible";
     this.in_name.focus();
     // press Enter to submit  
-    wait_for_submit = true;
+    this.wait_for_submit = true;
   }
 
   submit_score() {
@@ -169,7 +169,7 @@ class Menu {
     this.in_name.value = null;
     //
     this.clear();
-    wait_for_submit = false;
+    this.wait_for_submit = false;
     this.show();
   }
 }

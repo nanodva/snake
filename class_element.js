@@ -1,12 +1,13 @@
 // class for mobile elements
 class Element {
-  constructor(x, y, size, color) {
+  constructor(x, y, size, color, name) {
     // square side lenght
     this.size = size;
+    this.color = color;
     this.x = x ;
     this.y = y ;
-    arena.book(this.x,this.y);
-    this.color = color;
+    this.name = name;
+    arena.book(this.x,this.y, this.name);
   }
   set_direction(direction) {
     // for moving element
@@ -47,13 +48,13 @@ class Element {
     // arena.context.fillRect(this.x, this.y, this.size, this.size);
   }
 
-  // move(direction) {
   move() {
     var dest = {
       x: this.x,
       y: this.y
     }
 
+    // get dest coord, ( 1 square move)
     if (this.direction == DIR.RIGHT) {
       dest.x++;
     }
@@ -66,13 +67,16 @@ class Element {
     else if (this.direction == DIR.DOWN) {
       dest.y++;
     }
+
+
     if (arena.is_square_free(dest.x, dest.y)) {
       arena.free(this.x, this.y);
       this.x = dest.x;
       this.y = dest.y;
-      arena.book(this.x, this.y)
+      arena.book(this.x, this.y, this.name)
       return true;
     } else {
+      console.log("element move false: ", dest.x, dest.y);
       return false;
     }
 

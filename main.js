@@ -23,13 +23,13 @@ var apple_color = "hsl(0, 80%, 50%)";
 
 
 // OBJECTS
-var game = new Game();
+var game = new Game(game_speed);
 var menu = new Menu(width, height);
 var arena = new Arena(division, division, width, height);
 var score = new Score(20, 20, 40, "hsla(0, 100%, 100%, 0.5)");
 // var worm = new Worm();
 var worm = new Worm();
-var apple;
+var apple = new Apple(apple_color);
 
 
 
@@ -43,23 +43,28 @@ function f_init_all() {
   menu.show();
 } 
 
-function game_start() {
-  menu.hide();
+function reset_all() {
+  console.debug("reset all");
+  game.reset();
   arena.reset();
   worm.reset();
-  score.reset()
-  apple = new Apple();
+  score.reset();
+  apple.reset();
+  // console.table(worm);
+  // console.table(arena);
+}
+
+function game_start() {
+  reset_all();
+  menu.hide();
   apple.new();
   
-  game.start(loop_delay, game_speed);
-  game_is_running = true;
-  
+  game.start();
+  // game_is_running = true;
 }
 
 function game_over() {
-  // when player lose
   game.stop();
-  game_status = "game over";
   menu.game_over();
 }
 
@@ -73,23 +78,23 @@ function key_event_listener(event) {
   document.getElementById("game_key").innerHTML = event.key;
 
   // ingame key events
-  // if (game_is_running) {
   if (game.is_running) {
     switch (event.key) {
       case "ArrowRight":
-        worm.turn_right();
+        worm.push("right");
         break;
       case "ArrowLeft":
-        worm.turn_left();
+        worm.push("left");
         break;
     }
   }
   // wait for name submit after game is over
-  else if (wait_for_submit) {
+  else if (game.is_over) {
     switch (event.key) {
     case "Enter":
       game_status = "submit form";
       menu.submit_score();
+      game.reset();
       break;
     }
   }
