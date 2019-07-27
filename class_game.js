@@ -47,9 +47,8 @@ class Game {
     game.framecount++;
     if ((game.framecount % game.speed) == 0) {
       // move worm, end game if fails
-      if (worm.move()) {
-        worm.test_collision();
-      } else {
+      worm.move();
+      if (worm.test_collision()) {
         worm.died();
         game_over();
       }

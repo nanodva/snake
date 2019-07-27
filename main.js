@@ -17,8 +17,9 @@ var loop_delay = 10;
 var game_speed = 14;
 
 // COMPONENTS COLORS
-var head_color = "hsl(245, 12%, 92%)";
-var body_color = "hsl(225, 8%, 25%)";
+var head_color = "hsl(245, 12%, 80%)";
+var ghost_color = "hsl(45, 25%, 80%)";
+var body_color = "hsl(225, 8%, 35%)";
 var apple_color = "hsl(0, 80%, 50%)";
 
 

@@ -8,6 +8,7 @@ class Element {
     this.y = y ;
     this.name = name;
     arena.book(this.x,this.y, this.name);
+    this.ctx = arena.context;
   }
   set_direction(direction) {
     // for moving element
@@ -68,17 +69,18 @@ class Element {
       dest.y++;
     }
 
+    // if (arena.is_square_free(dest.x, dest.y)) {
+    //   arena.free(this.x, this.y);
+    //   this.x = dest.x;
+    //   this.y = dest.y;
+    //   arena.book(this.x, this.y, this.name)
+    //   return true;
+    // } else {
+    //   console.log("element move false: ", dest.x, dest.y);
+    //   return false;
+    // }
 
-    if (arena.is_square_free(dest.x, dest.y)) {
-      arena.free(this.x, this.y);
-      this.x = dest.x;
-      this.y = dest.y;
-      arena.book(this.x, this.y, this.name)
-      return true;
-    } else {
-      console.log("element move false: ", dest.x, dest.y);
-      return false;
-    }
-
+    this.x = dest.x;
+    this.y = dest.y;
   }
 }
