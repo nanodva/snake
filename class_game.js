@@ -24,6 +24,7 @@ class Game {
   }
   reset() {
     this.framecount = 0;
+    this.imagecount = 0;
     this.score = 0;
     this._status = "ready";
   }
@@ -44,13 +45,23 @@ class Game {
     // "this" doesn't exist here
     // and must be called by its variable name
 
+    //reel frames count
     game.framecount++;
-    if ((game.framecount % game.speed) == 0) {
-      // move worm, end game if fails
-      worm.move();
-      if (worm.test_collision()) {
-        worm.died();
-        game_over();
+    // division for game speed, game frames count
+    var frame = game.framecount % game.speed;
+    if (frame == 0) {
+      game.imagecount++;
+      var mod = game.imagecount % movediv;
+      console.log("new image: ", game.imagecount, " mod: ", mod);
+    
+      if ((game.imagecount % movediv) == 0) {
+      // if ((game.imagecount % movediv) == movediv) {
+        worm.move();
+        console.log("new move");
+        if (worm.test_collision()) {
+          worm.died();
+          game_over();
+        }
       }
     }
     arena.draw(); 

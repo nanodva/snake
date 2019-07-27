@@ -5,6 +5,7 @@ var game_is_running = false;
 var game_is_over = false;
 var wait_for_submit = false;
 
+
 // arena dimension in px
 var width = 400;
 var height = width;
@@ -13,8 +14,9 @@ var division = 12;
 var sqr_size = width / division;
 
 // GAME SPEED AND REFRESH RATE
-var loop_delay = 10; 
-var game_speed = 14;
+var loop_delay = 3; 
+var game_speed = 3;
+var movediv = 5;
 
 // COMPONENTS COLORS
 var head_color = "hsl(245, 12%, 80%)";

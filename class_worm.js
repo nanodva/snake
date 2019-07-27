@@ -1,18 +1,87 @@
-class WormHead extends Element {
+
+class WormPart extends Element {
+  constructor(x,y,size,color,name) {
+    super(x,y,size,color,name);
+    this.xreel = this.x * this.size;
+    this.yreel = this.y * this.size;
+  }
+  draw() {
+    // square origins
+    var xo = this.x * this.size;
+    var yo = this.y * this.size;
+
+    // which part of the move ratio
+    var mod = game.imagecount % movediv;
+    // how many pixels by move
+    var dep = mod * (this.size / movediv);
+
+    switch (this.direction) {
+      case DIR.RIGHT:
+        xo += dep
+        break;
+      case DIR.DOWN:
+        yo += dep
+        break;
+      case DIR.LEFT:
+        xo -= dep
+        break;
+      case DIR.UP:
+        yo -= dep
+        break;
+    }
+
+    // rect color
+    arena.context.fillStyle = this.color;
+    arena.context.fillRect(xo, yo, this.size, this.size);
+
+  }
+
+
+  move() {
+    var dest = {
+      x: this.x,
+      y: this.y
+    }
+
+    // get dest coord, ( 1 square move)
+    if (this.direction == DIR.RIGHT) {
+      dest.x++;
+    }
+    else if (this.direction == DIR.LEFT) {
+      dest.x--;
+    }
+    else if (this.direction == DIR.UP) {
+      dest.y--;
+    }
+    else if (this.direction == DIR.DOWN) {
+      dest.y++;
+    }
+
+    this.x = dest.x;
+    this.y = dest.y;
+  }
+}
+
+class WormHead extends WormPart {
   constructor(x, y, size) {
     super(x,y,size,head_color,"head");
     this.direction = DIR.RIGHT;
   }
   draw() {
     super.draw();
-
-    // eyes
-    // 
+    // this.draw_eyes();
+  }
+  
+  draw_eyes() {
+    // draw to black squares in head
     var xo = this.x * this.size;
     var yo = this.y * this.size;
     // space and eye size
     var gap = this.size/5;
 
+    // table of the four eyes positions
+    // upper-left, upper-right, dow-right, down-left..and upper right again
+    // ...cause eyes are drawed by pairs
     var eyecoords = [
       [ xo + gap, yo + gap ],
       [ xo + 3*gap, yo + gap ],
@@ -21,6 +90,7 @@ class WormHead extends Element {
       [ xo + gap, yo + gap ]
     ];
 
+    // select eyes to display according to head direction
     var i = 0;
     switch (this.direction) {
       case DIR.RIGHT:
@@ -36,6 +106,8 @@ class WormHead extends Element {
         i = 0;
         break;
     }
+
+    // draw eyes
     this.ctx.fillStyle = "black";
     var j = i+2;
     var x,y;
@@ -45,8 +117,6 @@ class WormHead extends Element {
       this.ctx.fillRect(x, y, gap, gap);
     }
   }
-
-
 }
 
 class Worm {
@@ -125,12 +195,12 @@ class Worm {
   move() {
     var len = this.body.length;
 
-    // change head direction if requested
-    var side;
-    if (side=this.pop()) {
-      // console.debug("pop side: ", side);
-      this.turn(side);
-    }
+    // // change head direction if requested
+    // var side;
+    // if (side=this.pop()) {
+    //   // console.debug("pop side: ", side);
+    //   this.turn(side);
+    // }
 
     // copy tail properties if worm growth
     var tail = this.body[len-1];
@@ -157,9 +227,17 @@ class Worm {
       }
     }
 
+    // change head direction if requested
+    var side;
+    if (side=this.pop()) {
+      // console.debug("pop side: ", side);
+      this.turn(side);
+    }
+
     // snake grows from the tail end by one element
     if (this.growth > 0) {
-      var newtail = new Element(tail_x, tail_y, sqr_size, body_color, "tail");
+      // var newtail = new Element(tail_x, tail_y, sqr_size, body_color, "tail");
+      var newtail = new WormPart(tail_x, tail_y, sqr_size, body_color, "tail");
       newtail.set_direction(tail_dir);
       this.body.push(newtail);
       score.value += 1;
