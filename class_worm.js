@@ -33,9 +33,7 @@ class WormPart extends Element {
     // rect color
     arena.context.fillStyle = this.color;
     arena.context.fillRect(xo, yo, this.size, this.size);
-
   }
-
 
   move() {
     var dest = {
@@ -69,7 +67,7 @@ class WormHead extends WormPart {
   }
   draw() {
     super.draw();
-    // this.draw_eyes();
+    this.draw_eyes();
   }
   
   draw_eyes() {

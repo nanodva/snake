@@ -46,19 +46,21 @@ class Game {
     // and must be called by its variable name
 
     //reel frames count
-    game.framecount++;
     // division for game speed, game frames count
     var frame = game.framecount % game.speed;
+    game.framecount++;
     if (frame == 0) {
-      game.imagecount++;
+      // reel image count
       var mod = game.imagecount % movediv;
       console.log("new image: ", game.imagecount, " mod: ", mod);
+      game.imagecount++;
     
-      if ((game.imagecount % movediv) == 0) {
+      if ( mod == (movediv-1)) {
       // if ((game.imagecount % movediv) == movediv) {
         worm.move();
         console.log("new move");
         if (worm.test_collision()) {
+          console.log("worm died");
           worm.died();
           game_over();
         }

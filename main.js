@@ -14,8 +14,8 @@ var division = 12;
 var sqr_size = width / division;
 
 // GAME SPEED AND REFRESH RATE
-var loop_delay = 3; 
-var game_speed = 3;
+var loop_delay = 10; 
+var game_speed = 10;
 var movediv = 5;
 
 // COMPONENTS COLORS
