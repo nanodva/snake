@@ -5,35 +5,37 @@ class WormPart extends Element {
     this.xreel = this.x * this.size;
     this.yreel = this.y * this.size;
   }
-  draw() {
-    // square origins
-    var xo = this.x * this.size;
-    var yo = this.y * this.size;
+  // draw() {
+  //   // square origins
+  //   var xo = this.x * this.size;
+  //   var yo = this.y * this.size;
 
-    // which part of the move ratio
-    var mod = game.imagecount % movediv;
-    // how many pixels by move
-    var dep = mod * (this.size / movediv);
+  //   if (! this.is_static) {
+  //     // which part of the move ratio
+  //     var mod = game.imagecount % movediv;
+  //     // how many pixels by move
+  //     var dep = mod * (this.size / movediv);
 
-    switch (this.direction) {
-      case DIR.RIGHT:
-        xo += dep
-        break;
-      case DIR.DOWN:
-        yo += dep
-        break;
-      case DIR.LEFT:
-        xo -= dep
-        break;
-      case DIR.UP:
-        yo -= dep
-        break;
-    }
+  //     switch (this.direction) {
+  //       case DIR.RIGHT:
+  //         xo += dep
+  //         break;
+  //       case DIR.DOWN:
+  //         yo += dep
+  //         break;
+  //       case DIR.LEFT:
+  //         xo -= dep
+  //         break;
+  //       case DIR.UP:
+  //         yo -= dep
+  //         break;
+  //     }
+  //   }
 
-    // rect color
-    arena.context.fillStyle = this.color;
-    arena.context.fillRect(xo, yo, this.size, this.size);
-  }
+  //   // rect color
+  //   arena.context.fillStyle = this.color;
+  //   arena.context.fillRect(xo, yo, this.size, this.size);
+  // }
 
   move() {
     var dest = {
@@ -66,15 +68,47 @@ class WormHead extends WormPart {
     this.direction = DIR.RIGHT;
   }
   draw() {
-    super.draw();
-    this.draw_eyes();
-  }
+  //   super.draw();
+  //   this.draw_eyes();
+  // }
   
-  draw_eyes() {
-    // draw to black squares in head
+  // draw_eyes() {
+  //   // draw to black squares in head
+     // square origins
     var xo = this.x * this.size;
     var yo = this.y * this.size;
-    // space and eye size
+
+    // draw body mask behind head
+    arena.context.fillStyle = body_color;
+    arena.context.fillRect(xo, yo, this.size, this.size);
+
+    // which part of the move ratio
+    var mod = game.imagecount % movediv;
+    // how many pixels by move
+    var dep = mod * (this.size / movediv);
+
+    switch (this.direction) {
+      case DIR.RIGHT:
+        xo += dep
+        break;
+      case DIR.DOWN:
+        yo += dep
+        break;
+      case DIR.LEFT:
+        xo -= dep
+        break;
+      case DIR.UP:
+        yo -= dep
+        break;
+    }
+
+    // rect color
+    arena.context.fillStyle = this.color;
+    arena.context.fillRect(xo, yo, this.size, this.size);
+    // var xo = this.x * this.size;
+    // var yo = this.y * this.size;
+    
+    // space beetween eyes and eyes size are the same
     var gap = this.size/5;
 
     // table of the four eyes positions
@@ -123,7 +157,7 @@ class Worm {
   }
 
   reset() {
-    // this.direction = DIR.RIGHT;
+    console.log("worm reset");
     this.growth = 1;
 
     // create head at top left corner
@@ -132,6 +166,11 @@ class Worm {
     // make head, first part of the body
     this.head = new WormHead(xpos, ypos, sqr_size);
     this.body = [this.head];
+
+    //flags
+    this.has_new_tail = false;
+    this.newtail = null;
+    this.ghost = null;
 
     // stack keyboard commands in fifo
     this.fifo = [];
@@ -147,28 +186,32 @@ class Worm {
     for (i=len; i>0; i--) {
       this.body[i-1].draw();
     }
+
+    if (this.has_new_tail == true) {
+      this.newtail.draw();
+    }
   }
 
   died() {
-    // alert("worms died");
+    console.log("worm died");
     this.head.x = this.ghost.x;
     this.head.y = this.ghost.y;
     this.head.color = this.ghost.color;
-    // .color = "orange";
-    // this.body.shift();
+    console.table(this.body);
   }
 
   push(side) {
     // push next direction change in fifo
     this.fifo.push(side);
-    // console.table(this.fifo);
   }
 
   pop() {
     // retrieve oldest direction command
-    // console.debug("popping...");
+    var dir;
     if (this.fifo.length > 0) {
-      return this.fifo.shift();
+      dir = this.fifo.shift();
+      console.debug("worm pop: ", dir);
+      return dir;
     } else {
       return false;
     }
@@ -191,20 +234,8 @@ class Worm {
   }
 
   move() {
+    console.log("worm move");
     var len = this.body.length;
-
-    // // change head direction if requested
-    // var side;
-    // if (side=this.pop()) {
-    //   // console.debug("pop side: ", side);
-    //   this.turn(side);
-    // }
-
-    // copy tail properties if worm growth
-    var tail = this.body[len-1];
-    var tail_x = tail.x;
-    var tail_y = tail.y;
-    var tail_dir = tail.direction;
 
     // copy head to display in case of collision
     var x = this.head.x;
@@ -232,16 +263,38 @@ class Worm {
       this.turn(side);
     }
 
-    // snake grows from the tail end by one element
+
+    console.log("move end");
+    console.table(this.body);
+  }
+
+  grows() {
+    // copy tail properties if worm growth
+    var len = this.body.length;
+    var tail = this.body[len-1];
+    if (this.has_new_tail == true) {
+      console.log("worm attach newtil");
+      this.newtail.is_static = false;
+      this.body.push(this.newtail);
+      this.has_new_tail = false;
+      console.table(this.newtail);
+      return true;
+    }
+
     if (this.growth > 0) {
       // var newtail = new Element(tail_x, tail_y, sqr_size, body_color, "tail");
-      var newtail = new WormPart(tail_x, tail_y, sqr_size, body_color, "tail");
-      newtail.set_direction(tail_dir);
-      this.body.push(newtail);
+      this.newtail = new WormPart(tail.x, tail.y, sqr_size, body_color, "tail");
+      // this.newtail.direction = tail.direction;
+      this.newtail.is_static = true;
+
       score.value += 1;
       this.growth--;
+      this.has_new_tail = true;
+      console.log("worm grows. ", tail.x, tail.y);
+      console.table(this.body);
+      console.table(this.newtail);
+      return true;
     }
-    return true;
   }
 
   test_collision(){
@@ -251,7 +304,7 @@ class Worm {
     var y = this.head.y ;
     if (x < 0 || x >= arena.cols || y < 0 || y >= arena.rows ) {
       status = "edge collision";
-      this.died();
+      // this.died();
       return true;
     }
 
@@ -259,7 +312,7 @@ class Worm {
     for (var i = 1; i < this.body.length; i++) {
       if (this.head.x == this.body[i].x && this.head.y == this.body[i].y) {
         status = "body collision";
-        this.died();
+        // this.died();
         return true;
       }
     }
@@ -268,6 +321,7 @@ class Worm {
     if (this.head.x == apple.x && this.body[0].y == apple.y) {
       // worms is getting bigger
       this.growth += apple.power;
+      console.log("worm eats apple");
       apple.new();
     }
     return false;

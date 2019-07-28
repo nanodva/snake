@@ -54,22 +54,25 @@ class Game {
       var mod = game.imagecount % movediv;
       console.log("new image: ", game.imagecount, " mod: ", mod);
       game.imagecount++;
-    
+      if (mod == 0) {
+        worm.grows();
+      }
+
       if ( mod == (movediv-1)) {
-      // if ((game.imagecount % movediv) == movediv) {
-        worm.move();
         console.log("new move");
+        worm.grows();
+        worm.move();
         if (worm.test_collision()) {
           console.log("worm died");
           worm.died();
           game_over();
         }
       }
+      arena.draw(); 
+      apple.draw();
+      worm.draw();
+      score.draw();
     }
-    arena.draw(); 
-    apple.draw();
-    worm.draw();
-    score.draw();
     update_debug_data();
   }
 }
