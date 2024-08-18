@@ -67,18 +67,21 @@
     <?php
 		$servername = "localhost";
 		$username = "snake";
-		$password = "";
-		$database = "snake_db";
+		$password = "password";
+		$database = "snakeDB";
 		$table = "score";
 
 		// connecting to my sql
 		$conn = new mysqli($servername, $username, $password, $database);
-		if (mysqli_connect_error($conn)) {
-			die ("Failed to connect to mysql. " . mysqli_connect_error($conn));
+
+		
+		if ($conn->connect_error) {
+			die ("Failed to connect to mysql: " . $conn->connect_error);
 		} else {
 			// echo in html code
 			echo "<!-- mysql connected -->";
 		}
+		
 
 		// store new score if new score in POST
 		if ( isset($_POST["score"]) and isset($_POST["name"])) {
@@ -98,9 +101,11 @@
 		}
 
 		// query for scores
-		mysqli_refresh($conn,MYSQLI_REFRESH_TABLES);
+		//mysqli_refresh($conn,MYSQLI_REFRESH_TABLES);
 		$query="SELECT name,score FROM score ORDER BY score DESC LIMIT 10";
-		$result=mysqli_query($conn,$query);
+		//$result=mysqli_query($conn,$query);
+		$result = $conn->query($query);
+		
 
 		// display scores list
 		$fmt="<tr><td class='name'>%s</td><td class='score'>%s</td></tr>\n";
