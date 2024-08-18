@@ -2,8 +2,8 @@
 class WormPart extends Element {
   constructor(x,y,size,color,name) {
     super(x,y,size,color,name);
-    this.xreel = this.x * this.size;
-    this.yreel = this.y * this.size;
+    // this.xreel = this.x * this.size;
+    // this.yreel = this.y * this.size;
   }
   // draw() {
   //   // square origins
@@ -68,13 +68,7 @@ class WormHead extends WormPart {
     this.direction = DIR.RIGHT;
   }
   draw() {
-  //   super.draw();
-  //   this.draw_eyes();
-  // }
-  
-  // draw_eyes() {
-  //   // draw to black squares in head
-     // square origins
+    // square origins
     var xo = this.x * this.size;
     var yo = this.y * this.size;
 
@@ -105,8 +99,6 @@ class WormHead extends WormPart {
     // rect color
     arena.context.fillStyle = this.color;
     arena.context.fillRect(xo, yo, this.size, this.size);
-    // var xo = this.x * this.size;
-    // var yo = this.y * this.size;
     
     // space beetween eyes and eyes size are the same
     var gap = this.size/5;
@@ -240,6 +232,7 @@ class Worm {
     // copy head to display in case of collision
     var x = this.head.x;
     var y = this.head.y;
+    // ghost will be displayed, head may disapear if collide
     this.ghost = new Element(x, y, sqr_size, ghost_color, "ghost");
 
     // move all body parts
